@@ -4,8 +4,8 @@ import base64
 import json
 
 # insecure warning をオフ
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+#from requests.packages.urllib3.exceptions import InsecureRequestWarning
+#requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # 1レコード
 class FileMakerRecord:
@@ -87,16 +87,17 @@ class FileMakerDB:
     def delete(self, layout, recordID):
         token = self.token
         if not token:
-            return result
+            return 
         session = self.session
         url = f"{self.baseURL}layouts/{layout}/records/{recordID}"        
+        headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
         session.delete(url, headers=headers)
         
     #レコード内容を更新する
     def update(self, layout, recordID, fields):
         token = self.token
         if not token:
-            return result
+            return 
         session = self.session
         url = f"{self.baseURL}layouts/{layout}/records/{recordID}"   
         headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
@@ -107,20 +108,20 @@ class FileMakerDB:
     def insert(self, layout, fields):
         token = self.token
         if not token:
-            return result
+            return 
         session = self.session
-        url = f"{self.baseURL}layouts/{layout}/records/{recordID}"   
+        url = f"{self.baseURL}layouts/{layout}/records"   
         headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
         update = json.dumps({"fieldData": fields}, ensure_ascii=False)
-        session.post(url, headers=headers, data=update.encode("utf-8"), verify=False)
+        response = session.post(url, headers=headers, data=update.encode("utf-8"), verify=False)
         res = response.json()
         return res["response"]["recordId"] 
         
     #サーバースクリプトを実行する
-    def executeScript(layout, scritp, param):
+    def executeScript(self, layout, script, param):
         token = self.token
         if not token:
-            return result
+            return 
         session = self.session
         url = f"{self.baseURL}layouts/{layout}/records?script={script}&script.param={param}"   
         headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}

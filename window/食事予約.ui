@@ -113,6 +113,9 @@
       <height>351</height>
      </rect>
     </property>
+    <property name="spacing">
+     <number>10</number>
+    </property>
     <item>
      <property name="text">
       <string>朝食メニュー1</string>
@@ -133,6 +136,9 @@
       <height>351</height>
      </rect>
     </property>
+    <property name="spacing">
+     <number>10</number>
+    </property>
     <item>
      <property name="text">
       <string>昼食メニュー1</string>
@@ -144,6 +150,26 @@
      </property>
      <property name="flags">
       <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>昼食メニュー2</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>24</pointsize>
+      </font>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>昼食メニュー3</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>24</pointsize>
+      </font>
      </property>
     </item>
     <item>

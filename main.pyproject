@@ -1,0 +1,3 @@
+{
+    "files": ["main.ui","main.py","object/メニュー.py","Waiting.ui","window/Reserve.ui","Object/食事メニューData.py","object/Order.py","Waiting.py","Object/食事要求Data.py","object/状態.py","window/Waiting.py","object/社員.py","WindowChart.scxml","window/Waiting.ui","window/Receive.ui","window/Confirm.ui"]
+}

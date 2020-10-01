@@ -2,6 +2,9 @@ import sys
 import requests
 import base64
 import json
+import datetime
+from datetime import date
+from datetime import time
 
 # insecure warning をオフ
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -12,6 +15,23 @@ class FileMakerRecord:
     def __init__(self, dic):
         self.fieldData = dic["fieldData"]
         self.recordId = dic["recordId"]
+    # キーに対応する日付を取り出す
+    def day(self, キー):
+        data = self.fieldData[キー]
+        day = datetime.datetime.strptime(data, "%m/%d/%Y").date
+        return day
+    def time(self, キー):
+        data = self.fieldData[キー]
+        time = time.strptime(data, "%H:%M:%S")
+        return time
+
+# 日付をfilemaker用の文字列に変換する
+def makeDayString(日付: date):
+    return 日付.strftime("%m/%d/%Y")
+
+# 時刻をfilemaker用の文字列に変換する
+def makeTimeString(時刻: time):
+    return 時刻.strftime("%H:%M:%S")
 
 # データベース関数
 class FileMakerDB:

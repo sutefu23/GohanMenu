@@ -2,9 +2,6 @@
 
 import FileMakerDB
 
-# アクセス用レイアウト名
-DBName = "DataAPI_8" # systemn
-
 # IDカードテーブル
 class IDカード:
     社員番号: str
@@ -14,6 +11,9 @@ class IDカード:
         self.社員番号 = record.fieldData["社員番号"]
         self.カードID = record.fieldData["カードID"]
         self.recordId = record.recordId
+
+# アクセス用レイアウト名
+DBName = "DataAPI_8" # systemn
 
 # カードIDに対応するIDカードオブジェクトを返す
 def find(カードID):

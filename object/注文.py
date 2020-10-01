@@ -1,8 +1,8 @@
 # This Python file uses the following encoding: utf-8
 from enum import Enum
 from datetime import date
-import 社員, メニュー
-import FileMakerDB
+from . import 社員, メニュー
+from . import FileMakerDB
 
 class 食事要求状態(Enum):
     未処理 = "未処理"

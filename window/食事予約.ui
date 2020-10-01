@@ -125,6 +125,12 @@
        <pointsize>24</pointsize>
       </font>
      </property>
+     <property name="icon">
+      <iconset>
+       <selectedoff>icon/check_off.svg</selectedoff>
+       <selectedon>icon/check_on.svg</selectedon>
+      </iconset>
+     </property>
     </item>
    </widget>
    <widget class="QListWidget" name="listLunch">
@@ -147,6 +153,12 @@
       <font>
        <pointsize>24</pointsize>
       </font>
+     </property>
+     <property name="icon">
+      <iconset>
+       <selectedoff>icon/check_off.svg</selectedoff>
+       <selectedon>icon/check_on.svg</selectedon>
+      </iconset>
      </property>
      <property name="flags">
       <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>

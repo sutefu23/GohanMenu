@@ -1,7 +1,7 @@
 # This Python file uses the following encoding: utf-8
 from enum import Enum
 from datetime import date
-import FileMakerDB
+from . import FileMakerDB
 
 class 食事種類型(Enum):
     朝食 = "朝食"

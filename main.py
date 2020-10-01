@@ -4,29 +4,36 @@ import os
 
 
 from PySide2.QtWidgets import QApplication, QWidget
-from PySide2.QtCore import Signal, Slot, QFile
+from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
 
-from enum import Enum
-from window.カード待受 import 待受状態
+
+from window import カード待受
 
 
 class GohanMenu(QWidget):
+
     def __init__(self):
         super(GohanMenu, self).__init__()
         self.load_ui()
+        self.ui.btnOpenReserve.clicked.connect(
+            lambda: self.show_window(カード待受.待受状態.食事予約))
+        self.ui.btnOpenConfirm.clicked.connect(
+            lambda: self.show_window(カード待受.待受状態.予約状況))
+        self.ui.btnOpenReceive.clicked.connect(
+            lambda: self.show_window(カード待受.待受状態.食事受取))
 
     def load_ui(self):
         loader = QUiLoader()
         path = os.path.join(os.path.dirname(__file__), "main.ui")
         ui_file = QFile(path)
         ui_file.open(QFile.ReadOnly)
-        loader.load(ui_file, self)
+        self.ui = loader.load(ui_file, self)
         ui_file.close()
 
-    @Slot(bool)
-    def menu_clicked(clicked: bool, 待受状態: 待受状態):
-        pass
+    def show_window(self, 待受状態: カード待受.待受状態):
+        self.child_window = カード待受.Window(待受状態)
+        self.child_window.ui.show()
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
-import FileMakerDB
+from . import FileMakerDB
 
 # 社員テーブル
 class 社員:

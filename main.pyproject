@@ -1,3 +1,3 @@
 {
-    "files": ["object/Order.py","Object/食事要求Data.py","window/Confirm.ui","window/Reserve.ui","object/社員.py","Waiting.py","window/Waiting.py","window/Waiting.ui","object/状態.py","object/メニュー.py","main.py","Object/食事メニューData.py","main.ui","window/Receive.ui","Waiting.ui","WindowChart.scxml","window/カード待受.py","window/予約状況.ui","window/食事予約.ui","window/食事受取.ui","window/カード待受.ui"]
+    "files": ["window/食事受取.ui","main.ui","window/Receive.ui","object/メニュー.py","object/Order.py","object/状態.py","Object/食事要求Data.py","window/予約状況.ui","window/Reserve.ui","Waiting.ui","object/社員.py","WindowChart.scxml","window/カード待受.py","main.py","window/Waiting.ui","window/カード待受.ui","Waiting.py","Object/食事メニューData.py","window/食事予約.ui","window/Confirm.ui","window/Waiting.py","window/予約状況.py","window/食事予約.py","window/食事受取.py"]
 }

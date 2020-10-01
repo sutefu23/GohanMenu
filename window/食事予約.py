@@ -1,9 +1,7 @@
 # This Python file uses the following encoding: utf-8
-import sys
 import os
 
-
-from PySide2.QtWidgets import QApplication, QWidget, QListWidgetItem
+from PySide2.QtWidgets import QWidget, QListWidgetItem
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
 from enum import Enum
@@ -17,9 +15,9 @@ from object.注文 import 注文
 from window import 予約状況
 
 
-class main(QWidget):
+class Window(QWidget):
     def __init__(self, メニューリスト: List[メニュー], 注文: 注文):
-        super(main, self).__init__()
+        super(Window, self).__init__()
         self.load_ui()
         self.メニューリスト = メニューリスト
         self.注文 = 注文
@@ -66,6 +64,6 @@ class main(QWidget):
         ui_file.close()
 
     def open_confirm_window(self):
-        self.child_window = 予約状況()
+        self.child_window = 予約状況.Window()
         self.child_window.ui.show()
         self.child_window.ui.btnOpenReserve.setVisible(False)

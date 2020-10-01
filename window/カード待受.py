@@ -1,9 +1,8 @@
 # This Python file uses the following encoding: utf-8
-import sys
 import os
 
 
-from PySide2.QtWidgets import QApplication, QWidget
+from PySide2.QtWidgets import QWidget
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
 from enum import Enum
@@ -41,11 +40,11 @@ class Window(QWidget):
 
     def show_window(self):
         if self.待受状態 == 待受状態.食事予約:
-            self.child_window = 食事予約()
+            self.child_window = 食事予約.Window()
         elif self.待受状態 == 待受状態.予約状況:
-            self.child_window = 予約状況()
+            self.child_window = 予約状況.Window()
         elif self.待受状態 == 待受状態.食事受取:
-            self.child_window = 食事受取()
+            self.child_window = 食事受取.Window()
         self.child_window.ui.show()
 
     def waiting_tag():
@@ -62,8 +61,6 @@ class Window(QWidget):
             if not target_res is None:
                 beep = SOUND()
                 beep.onRead()
-
-                tag = nfc.tag.activate(clf, target_res)
 
                 tag = nfc.tag.activate(clf, target_res)
 

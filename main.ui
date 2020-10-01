@@ -16,10 +16,10 @@
   <widget class="QPushButton" name="btnOpenReserve">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>30</y>
+     <x>180</x>
+     <y>60</y>
      <width>661</width>
-     <height>111</height>
+     <height>101</height>
     </rect>
    </property>
    <property name="font">
@@ -34,8 +34,8 @@
   <widget class="QPushButton" name="btnOpenConfirm">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>170</y>
+     <x>180</x>
+     <y>220</y>
      <width>661</width>
      <height>101</height>
     </rect>
@@ -52,8 +52,8 @@
   <widget class="QPushButton" name="btnOpenReceive">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>300</y>
+     <x>180</x>
+     <y>400</y>
      <width>661</width>
      <height>111</height>
     </rect>
@@ -67,42 +67,7 @@
     <string>食事受取</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnOpenServe">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>440</y>
-     <width>661</width>
-     <height>101</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>24</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>食事受渡</string>
-   </property>
-  </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>btnOpenReserve</sender>
-   <signal>clicked()</signal>
-   <receiver>GohanMenu</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>500</x>
-     <y>85</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>511</x>
-     <y>299</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

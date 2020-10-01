@@ -10,39 +10,39 @@ class 食事要求状態(Enum):
     受渡済 = "受渡済"
 
 class 注文:
-  社員番号: str
-  メニューID: str
-  状態: 食事要求状態
-  recordId: str = ""
-  def __init__(self, record: FileMakerDB.FileMakerRecord = None, 社員番号 = None, メニューID = None, 状態 = None):
-    if record:
-      self.社員番号 = record.fieldData["社員番号"]
-      self.メニューID = record.fieldData["メニューID"]
-      self.状態 = 食事要求状態(record.fieldData["要求状態"])
-      self.recordId =  record.recordId
-    if 社員番号:
-      self.社員番号 = 社員番号
-    if メニューID:
-      self.メニューID = メニューID
-    if 状態:
-      self.状態 = 状態
+    社員番号: str
+    メニューID: str
+    状態: 食事要求状態
+    recordId: str = ""
+    def __init__(self, record: FileMakerDB.FileMakerRecord = None, 社員番号 = None, メニューID = None, 状態 = None):
+        if record:
+            self.社員番号 = record.fieldData["社員番号"]
+            self.メニューID = record.fieldData["メニューID"]
+            self.状態 = 食事要求状態(record.fieldData["要求状態"])
+            self.recordId =  record.recordId
+        if 社員番号:
+            self.社員番号 = 社員番号
+        if メニューID:
+            self.メニューID = メニューID
+        if 状態:
+            self.状態 = 状態
 
-  # db上のレコードを削除する
-  def delete(self):
-    if not self.recordId:
-      return
-    FileMakerDB.system.delete(DBName, self.recordId)
+    # db上のレコードを削除する
+    def delete(self):
+        if not self.recordId:
+            return
+        FileMakerDB.system.delete(DBName, self.recordId)
 
-  # db上のデータをオブジェクトのデータで上書きする
-  # db上にデータが無ければ追加する
-  def upload(self):
-    data = { "社員番号": self.社員番号, "メニューID": self.メニューID, "要求状態": self.状態.name }
-    db = FileMakerDB.system
-    db.prepareToken()
-    if self.recordId:
-      db.update(DBName, self.recordId, data) # 更新
-    else:
-      db.insert(DBName, data) # 追加
+    # db上のデータをオブジェクトのデータで上書きする
+    # db上にデータが無ければ追加する
+    def upload(self):
+        data = { "社員番号": self.社員番号, "メニューID": self.メニューID, "要求状態": self.状態.name }
+        db = FileMakerDB.system
+        db.prepareToken()
+        if self.recordId:
+            db.update(DBName, self.recordId, data) # 更新
+        else:
+            db.insert(DBName, data) # 追加
 
 # アクセス用レイアウト名
 DBName = "DataAPI_7" # systemn
@@ -63,7 +63,8 @@ def find提供日(提供日: date, 社員番号: str):
     query = [{"提供日": daystr, "社員番号": 社員番号}]
     return find(query)
 
-def find提供日以降(開始日: date):
+
+def find提供日以降(開始日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(開始日)
     query = [{"提供日": f">={daystr}", "社員番号": 社員番号}]
     return find(query)
@@ -73,7 +74,7 @@ def find発注日(発注日: date, 社員番号: str):
     query = [{"発注日": daystr, "社員番号": 社員番号}]
     return find(query)
 
-def find発注日以降(開始日: date):
+def find発注日以降(開始日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(開始日)
     query = [{"発注日": f">={daystr}", "社員番号": 社員番号}]
     return find(query)

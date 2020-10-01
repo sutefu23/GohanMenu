@@ -4,8 +4,8 @@ import base64
 import json
 
 # insecure warning をオフ
-#from requests.packages.urllib3.exceptions import InsecureRequestWarning
-#requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # 1レコード
 class FileMakerRecord:
@@ -48,6 +48,8 @@ class FileMakerDB:
             headers = {"Authorization": "Bearer " + token, "Content-Type": "application/json"}
             response = session.get(url, headers=headers, verify=False)
             json = response.json()
+            if not json["response"]:
+                break
             data = json["response"]["data"] 
             for dic in data:
                 record = FileMakerRecord(dic)
@@ -73,6 +75,8 @@ class FileMakerDB:
             request = json.dumps({"query": query, "offset": offset, "limit": limit}, ensure_ascii=False)
             response = session.post(url, headers=headers, data=request.encode("utf-8"), verify=False)
             res = response.json()
+            if not res["response"]:
+                break
             data = res["response"]["data"] 
             for dic in data:
                 record = FileMakerRecord(dic)
@@ -128,9 +132,9 @@ class FileMakerDB:
         session.get(url, headers=headers, verify=False)
         
 # 生産管理DB
-db_main = FileMakerDB("pm_osakaname", "api", "@pi")
+pm_osakaname = FileMakerDB("pm_osakaname", "api", "@pi")
 # 補助DB
-db_sub = FileMakerDB("system", "admin", "ws161")
+system = FileMakerDB("system", "admin", "ws161")
 
 #test
 #db_main.prepareToken()

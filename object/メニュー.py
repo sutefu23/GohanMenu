@@ -59,7 +59,10 @@ def find提供日以降(開始日: date):
 
 # テスト
 def test():
-    day = date(2020, 9, 30)
-    result = find提供日以降(day)
+    result = findメニューID("M000011")
     print(result[0].内容)
+def test2():
+    day = date(2020, 11, 4)
+    result = find提供日以降(day)
+    print(len(result))
 #test()

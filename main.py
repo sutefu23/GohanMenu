@@ -8,7 +8,7 @@ from PySide2.QtCore import Signal, Slot, QFile
 from PySide2.QtUiTools import QUiLoader
 
 from enum import Enum
-from window.Waiting import 待受状態
+from window.カード待受 import 待受状態
 
 
 class GohanMenu(QWidget):

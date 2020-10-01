@@ -14,9 +14,9 @@ class 待受状態(Enum):
     食事受取 = "食事受取"
 
 
-class WaitReading(QWidget):
+class main(QWidget):
     def __init__(self):
-        super(WaitReading, self).__init__()
+        super(main, self).__init__()
         self.load_ui()
 
     def load_ui(self):

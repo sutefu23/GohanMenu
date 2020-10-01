@@ -14,10 +14,34 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>170</y>
+      <width>721</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>48</pointsize>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>社員カードをかざしてください</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
    <widget class="QPushButton" name="btnGoBack">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>360</x>
       <y>510</y>
       <width>291</width>
       <height>51</height>
@@ -29,7 +53,7 @@
      </font>
     </property>
     <property name="text">
-     <string>予約終了</string>
+     <string>トップメニューへ</string>
     </property>
    </widget>
   </widget>

@@ -16,10 +16,13 @@ class 注文:
   recordId: str = ""
   def __init__(self, record: FileMakerDB.FileMakerRecord = None, 社員番号 = None, メニューID = None, 状態 = None):
     if record:
-      self.社員番号 = record.fieldData["社員番号"]
-      self.メニューID = record.fieldData["メニューID"]
-      self.状態 = 食事要求状態(record.fieldData["要求状態"])
+      self.社員番号 = record.string("社員番号")
+      self.メニューID = record.string("メニューID")
+      self.状態 = 食事要求状態(record.string("要求状態"))
       self.recordId =  record.recordId
+      self.提供日 = record.day("DataAPI_食事メニュー::提供日")
+      self.発注日 = record.day("DataAPI_食事メニュー::発注日")
+      self.種類 = 食事種類型(record.string("DataAPI_食事メニュー::種類"))
     if 社員番号:
       self.社員番号 = 社員番号
     if メニューID:

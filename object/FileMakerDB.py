@@ -15,13 +15,17 @@ class FileMakerRecord:
     def __init__(self, dic):
         self.fieldData = dic["fieldData"]
         self.recordId = dic["recordId"]
-    # キーに対応する日付を取り出す
-    def day(self, キー):
-        data = self.fieldData[キー]
+    # フィールド名に対応する文字列を取り出す
+    def string(self, フィールド名):
+        return self.fieldData[フィールド名]
+    # フィールド名に対応する日付を取り出す
+    def day(self, フィールド名):
+        data = self.fieldData[フィールド名]
         day = datetime.datetime.strptime(data, "%m/%d/%Y").date
         return day
-    def time(self, キー):
-        data = self.fieldData[キー]
+    # フィールド名に対応する時刻を取り出す
+    def time(self, フィールド名):
+        data = self.fieldData[フィールド名]
         time = time.strptime(data, "%H:%M:%S")
         return time
 
@@ -157,7 +161,7 @@ pm_osakaname = FileMakerDB("pm_osakaname", "api", "@pi")
 system = FileMakerDB("system", "admin", "ws161")
 
 #test
-#db_main.prepareToken()
-#result = db_main.find("DATAAPI_8", [{"社員番号": "023"}])
-#print(result[0].fieldData)
+#pm_osakaname.prepareToken()
+#result = pm_osakaname.find("DATAAPI_8", [{"社員番号": "023"}])
+#print(result[0].string("社員名称"))
 

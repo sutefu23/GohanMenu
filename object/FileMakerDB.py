@@ -54,6 +54,9 @@ class FileMakerDB:
         self.token = token
         return token
 
+    def logout(self):
+        self.session = None
+
     # テーブルの内容をすべて取得する
     def fetch(self, layout):
         result = []

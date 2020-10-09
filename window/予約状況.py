@@ -54,4 +54,3 @@ class Window(QWidget):
     def open_reserve_window(self):
         self.child_window = 食事予約.Window()
         self.child_window.ui.show()
-        self.child_window.ui.btnOpenConfirm.setVisible(False)

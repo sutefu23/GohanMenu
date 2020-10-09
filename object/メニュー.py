@@ -1,7 +1,9 @@
 # This Python file uses the following encoding: utf-8
 from enum import Enum
 from datetime import date
-from . import FileMakerDB
+from object import FileMakerDB
+
+from pprint import pprint
 
 class 食事種類型(Enum):
     朝食 = "朝食"
@@ -60,9 +62,11 @@ def find提供日以降(開始日: date):
 # テスト
 def test():
     result = findメニューID("M000011")
-    print(result[0].内容)
+    pprint(vars(result[0]))
 def test2():
     day = date(2020, 11, 4)
     result = find提供日以降(day)
-    print(len(result))
+    pprint(vars(result[0]))
+
 #test()
+#test2()

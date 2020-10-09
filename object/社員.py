@@ -1,11 +1,12 @@
 # This Python file uses the following encoding: utf-8
 
-from . import FileMakerDB
+from object import FileMakerDB
 
 # 社員テーブル
 class 社員:
     社員番号: str
     社員名称: str
+    社員_姓: str
     recordId: str
     def __init__(self, record):
         self.社員番号 = record.fieldData["社員番号"]

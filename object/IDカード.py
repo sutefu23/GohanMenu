@@ -1,6 +1,6 @@
 # This Python file uses the following encoding: utf-8
 
-from . import FileMakerDB
+from object import FileMakerDB
 
 # IDカードテーブル
 class IDカード:
@@ -10,13 +10,12 @@ class IDカード:
     def __init__(self, record):
         self.社員番号 = record.fieldData["社員番号"]
         self.カードID = record.fieldData["カードID"]
-        self.recordId = record.recordId
 
 # アクセス用レイアウト名
 DBName = "DataAPI_8" # systemn
 
 # カードIDに対応するIDカードオブジェクトを返す
-def find(カードID):
+def find(カードID) -> IDカード:
     query = [{"カードID": カードID}] 
     db = FileMakerDB.system
     db.prepareToken()
@@ -27,8 +26,9 @@ def find(カードID):
 
 # 動作テスト
 def test(): # オブジェクトを返すテスト
-    cardID = "aabbccdd"
+    cardID = "62272C3A5C7862305C78393527"
     result = find(cardID)
+    print(vars(result))
     print(result.社員番号) 
     print(result.recordId) 
 def test2(): # オブジェクトが存在しない場合のテスト

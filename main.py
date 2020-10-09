@@ -7,9 +7,10 @@ from PySide2.QtWidgets import QApplication, QWidget
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
 
-
 from window import カード待受
+import config 
 
+print("現在の環境は", config.環境, "環境です。")
 
 class GohanMenu(QWidget):
 
@@ -18,10 +19,9 @@ class GohanMenu(QWidget):
         self.load_ui()
         self.ui.btnOpenReserve.clicked.connect(
             lambda: self.show_window(カード待受.待受状態.食事予約))
-        self.ui.btnOpenConfirm.clicked.connect(
-            lambda: self.show_window(カード待受.待受状態.予約状況))
         self.ui.btnOpenReceive.clicked.connect(
             lambda: self.show_window(カード待受.待受状態.食事受取))
+
 
     def load_ui(self):
         loader = QUiLoader()

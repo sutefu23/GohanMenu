@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>60</y>
+     <y>110</y>
      <width>661</width>
      <height>101</height>
     </rect>
@@ -31,29 +31,11 @@
     <string>食事予約</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnOpenConfirm">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
-     <y>220</y>
-     <width>661</width>
-     <height>101</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>24</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>予約状況</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="btnOpenReceive">
    <property name="geometry">
     <rect>
      <x>180</x>
-     <y>400</y>
+     <y>330</y>
      <width>661</width>
      <height>111</height>
     </rect>

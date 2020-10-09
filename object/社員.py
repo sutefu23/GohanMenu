@@ -9,13 +9,13 @@ class 社員:
     社員_姓: str
     recordId: str
     def __init__(self, record):
-        self.社員番号 = record.fieldData["社員番号"]
-        self.社員名称 = record.fieldData["社員名称"]
-        self.社員_姓 = record.fieldData["社員_姓"]
+        self.社員番号 = record.string("社員番号")
+        self.社員名称 = record.string("社員名称")
+        self.社員_姓 = record.string("社員_姓")
 
 # アクセス用レイアウト
 DBName = "DataAPI_8" # pm_osakaname
-
+#
     # 社員番号に対応する社員オブジェクトを返す
 def find(社員番号):
     query = [{"社員番号": 社員番号}] 

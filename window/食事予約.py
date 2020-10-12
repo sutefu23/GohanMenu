@@ -2,7 +2,7 @@
 import os
 
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QMessageBox
-from PySide2.QtCore import QFile
+from PySide2.QtCore import Qt, QFile
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtGui import QFont, QIcon, QColor, QBrush
 from typing import List
@@ -10,7 +10,7 @@ from typing import List
 from datetime import date, timedelta, datetime
 
 from object.メニュー import メニュー, 食事種類型, find提供日 as findメニュー提供日
-from object.注文 import 注文, 食事要求状態, find提供日 as find注文提供日
+from object.注文 import 注文, 食事要求状態, find提供日 as find注文提供日, find発注日 as find注文発注日
 from object.社員 import 社員
 from object import FileMakerDB
 from window import 予約状況
@@ -24,18 +24,14 @@ class Window(QWidget):
     メニューリスト: List[メニュー] = None
     注文リスト: List[注文] = None
 
-    def __init__(self, 社員: 社員, 提供日=date.today() + timedelta(days=1)):
+    def __init__(self, 社員: 社員, 提供日: date = None):
         super(Window, self).__init__()
         self.load_ui()
-        
+        self.setAttribute(Qt.WA_DeleteOnClose)
         self.社員 = 社員
-        self.提供日 = 提供日 #デフォルトでは今日の翌日
-        if config.環境 == "開発":
-            if self.提供日 == date.today() + timedelta(days=1):
-               self.提供日 = config.デバッグ日付 + timedelta(days=1)
-
+        self.提供日 = 提供日
         self.ui.btnGoBack.clicked.connect(
-            lambda: self.ui.close())
+            lambda: self.quit())
         self.ui.btnOpenConfirm.clicked.connect(
             lambda: self.open_confirm_window())
         self.ui.btnPrevDay.clicked.connect(
@@ -49,6 +45,9 @@ class Window(QWidget):
 
         self.plot_data()
 
+    def quit(self):
+        self.ui.close()
+
 
     def order(self, item: QListWidgetItem):
         #発注締切時刻以降は翌日より前のメニューを変更できない
@@ -56,7 +55,7 @@ class Window(QWidget):
 
         if config.発注締切時刻 <= datetime.now().time() and self.提供日 <=  today + timedelta(days=1):
             QMessageBox.warning(
-                None, "NOT FOUND", u"社員が見つかりません。", QMessageBox.OK)
+                None, "NOT PERMITTED", u"予約変更期限を過ぎています")
             return
 
         クリックメニュー名 = item.text()
@@ -64,10 +63,8 @@ class Window(QWidget):
             filter(lambda メニュー: メニュー.内容 == クリックメニュー名, self.メニューリスト))
         クリックメニュー = メニュー検索結果[0]
 
-
         db = FileMakerDB.system
         db.prepareToken()
-
 
         発注検索結果 = list(
             filter(lambda 注文: 注文.内容 == クリックメニュー名, self.注文リスト)) #クリックされたデータはすでに発注されたデータである
@@ -90,12 +87,14 @@ class Window(QWidget):
 
 
     def plot_data(self):
+        if self.提供日 is None: #デフォルトでは今日発注のものを表示
+            today = date.today() if config.環境 == "本番" else config.デバッグ日付
+            self.注文リスト = find注文発注日(today, self.社員.社員番号)
+            self.提供日 = self.注文リスト[0].提供日
+        else:
+            self.注文リスト = find注文提供日(self.提供日, self.社員.社員番号)
+
         self.メニューリスト = findメニュー提供日(self.提供日)
-        self.注文リスト = find注文提供日(self.提供日, self.社員.社員番号)
-        if config.環境 == "開発":
-            print("提供日:", self.提供日, "社員番号:", self.社員.社員番号)
-            if len(self.注文リスト) > 0 :
-                print(vars(self.注文リスト[0]))
 
         self.ui.labelToday.setText(date.strftime(self.提供日, '%m月%d日'))
         self.ui.labelStaffName.setText(self.社員.社員名称)
@@ -155,7 +154,10 @@ class Window(QWidget):
         self.ui = loader.load(ui_file, self)
         ui_file.close()
 
+
     def open_confirm_window(self):
-        self.child_window = 予約状況.Window(self.社員)
-        self.child_window.ui.show()
-        self.child_window.ui.btnOpenReserve.setVisible(False)
+        self.child_window = 予約状況.Window(self.社員, self)
+        if config.環境 == "開発":
+            self.child_window.ui.show()
+        else:
+            self.child_window.ui.showFullScreen()

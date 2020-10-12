@@ -3,11 +3,10 @@ from datetime import datetime
 import os
 
 from PySide2.QtWidgets import QWidget
-from PySide2.QtCore import QFile
+from PySide2.QtCore import Qt, QFile
 from PySide2.QtUiTools import QUiLoader
 from typing import List
 
-import pprint
 import datetime
 
 from object.メニュー import  食事種類型
@@ -23,6 +22,7 @@ class Window(QWidget):
     def __init__(self, 社員: 社員):
         super(Window, self).__init__()
         self.load_ui()
+        self.setAttribute(Qt.WA_DeleteOnClose)
 
         today = datetime.date.today()
         if config.環境 == "開発":
@@ -62,7 +62,7 @@ class Window(QWidget):
             self.ui.btnReceive.setVisible(False)
             print("受取済")
         else:
-            self.ui.labelMenu.setText(self.メニュー.内容)
+            self.ui.labelMenu.setText(self.注文.内容)
 
 
     def receive(self):

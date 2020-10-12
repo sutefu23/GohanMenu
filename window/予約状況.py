@@ -20,24 +20,33 @@ locale.setlocale(locale.LC_TIME, 'ja_JP.UTF-8')
 
 class Window(QWidget):
     注文リスト: List[注文]
-    def __init__(self,  社員: 社員):
+    予約画面: 食事予約
+    def __init__(self,  社員: 社員, 予約画面: 食事予約):
         super(Window, self).__init__()
+        self.setAttribute(Qt.WA_DeleteOnClose)
         self.load_ui()
+        self.予約画面 = 予約画面
         self.社員 = 社員
         self.ui.btnGoBack.clicked.connect(
+            self.quit)
+        self.ui.btnOpenReserve.clicked.connect(
             lambda: self.ui.close())
-        self.ui.tableWidget.itemClicked.connect(self.open_reserve_window)
+        self.ui.tableWidget.itemClicked.connect(self.reserve)
         self.plot_data()
 
+    def quit(self):
+        self.ui.close()
+        self.parent().ui.close()
 
-    def open_reserve_window(self, item: QTableWidgetItem):
 
+    def reserve(self, item: QTableWidgetItem):
         if item.column() == 0 :
             注文検索結果 = list(
                 filter(lambda 注文: 注文.提供日.strftime('%m年%d日(%a)') == item.text(), self.注文リスト))
             提供日 = 注文検索結果[0].提供日
-            self.child_window = 食事予約.Window(self.社員, 提供日)
-            self.child_window.ui.show()
+            self.ui.close()
+            self.予約画面.提供日 = 提供日
+            self.予約画面.plot_data()
 
 
     def plot_data(self):

@@ -33,12 +33,18 @@ class GohanMenu(QWidget):
 
     def show_window(self, 待受状態: カード待受.待受状態):
         self.child_window = カード待受.Window(待受状態)
-        self.child_window.ui.show()
+        if config.環境 == "開発":
+            self.child_window.ui.show()
+        else:
+            self.child_window.ui.showFullScreen()
 
 
 if __name__ == "__main__":
     app = QApplication([])
     widget = GohanMenu()
-    widget.show()
+    if config.環境 == "開発":
+        widget.show()
+    else:
+        widget.showFullScreen()
     sys.exit(app.exec_())
 

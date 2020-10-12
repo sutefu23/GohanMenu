@@ -13,6 +13,7 @@ from util.read import waiting_tag
 from window import 食事受取, 食事予約
 from object.社員 import 社員, find as 社員find
 from object.IDカード import find as IDカードfind
+import config
 
 queue = Queue()
 
@@ -45,7 +46,12 @@ class Window(QWidget):
             self.child_window = 食事予約.Window(社員)
         elif self.待受状態 == 待受状態.食事受取:
             self.child_window = 食事受取.Window(社員)
-        self.child_window.ui.show()
+        
+        if config.環境 == "開発":
+            self.child_window.ui.show()
+        else:
+            self.child_window.ui.showFullScreen()
+        
 
     def fetch_queue(self):
         if not queue.empty():
@@ -53,7 +59,7 @@ class Window(QWidget):
             IDカード = IDカードfind(idm)
             if IDカード is None:
                 QMessageBox.warning(
-                    None, "NOT FOUND", u"社員が見つかりません。", QMessageBox.OK)
+                    None, "NOT FOUND", u"社員が見つかりません。")
             else:
                 社員 = 社員find(IDカード.社員番号)
                 self.show_window(社員)

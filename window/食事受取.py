@@ -5,11 +5,12 @@ import os
 from PySide2.QtWidgets import QWidget
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
+from typing import List
 
 import pprint
 import datetime
 
-from object.メニュー import 食事種類型
+from object.メニュー import  食事種類型
 from object.注文 import 注文, find提供日, 食事要求状態
 from object import FileMakerDB
 
@@ -27,6 +28,7 @@ class Window(QWidget):
         if config.環境 == "開発":
             today = config.デバッグ日付
         注文リスト = find提供日(today, 社員.社員番号)
+
         now = datetime.datetime.now().time()
 
         self.社員 = 社員
@@ -39,22 +41,14 @@ class Window(QWidget):
         注文検索結果 = list(filter(lambda 注文: 注文.種類 == self.食事種類, 注文リスト))
         if len(注文検索結果) > 0:
             self.注文 = 注文検索結果[0]
-
-        pprint.pprint(self.注文)
+            if config.環境 == "開発":
+                print(vars(self.注文))
+        
         self.ui.btnGoBack.clicked.connect(
             lambda: self.ui.close())
         self.ui.btnReceive.clicked.connect(
             lambda: self.receive())
         self.plot_data()
-
-
-    def receive(self):
-        db = FileMakerDB.system
-        db.prepareToken()
-        data = 注文(社員番号=self.社員.社員番号, メニューID=self.注文.メニューID, 状態=食事要求状態.受取待)
-        data.upload()
-        db.logout()
-        self.close()
 
         
     def plot_data(self):
@@ -63,8 +57,21 @@ class Window(QWidget):
             self.ui.labelMenu.setText(u"予約がありません")
             self.ui.btnReceive.setVisible(False)
             print("注文なし")
+        elif self.注文.状態 != 食事要求状態.未処理:
+            self.ui.labelMenu.setText(u"受取済")
+            self.ui.btnReceive.setVisible(False)
+            print("受取済")
         else:
-            self.ui.labelMenu.setText(self.注文.内容)
+            self.ui.labelMenu.setText(self.メニュー.内容)
+
+
+    def receive(self):
+        db = FileMakerDB.system
+        db.prepareToken()
+        data = 注文(社員番号=self.社員.社員番号, メニューID=self.注文.メニューID, 状態=食事要求状態.受取待)
+        data.upload()
+        db.logout()
+        self.ui.close()
 
 
     def load_ui(self):

@@ -62,11 +62,17 @@
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
+    </property>
     <property name="showGrid">
      <bool>false</bool>
     </property>
     <attribute name="horizontalHeaderVisible">
      <bool>false</bool>
+    </attribute>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>23</number>
     </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>150</number>
@@ -76,6 +82,12 @@
     </attribute>
     <attribute name="verticalHeaderVisible">
      <bool>false</bool>
+    </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>23</number>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>30</number>
     </attribute>
     <row>
      <property name="text">
@@ -90,6 +102,11 @@
     <row>
      <property name="text">
       <string>メニュー情報２</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>24</pointsize>
+      </font>
      </property>
     </row>
     <column>

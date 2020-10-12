@@ -19,9 +19,9 @@ class FileMakerRecord:
     def string(self, フィールド名):
         return self.fieldData[フィールド名]
     # フィールド名に対応する日付を取り出す
-    def day(self, フィールド名):
+    def day(self, フィールド名)->datetime.date:
         data = self.fieldData[フィールド名]
-        day = datetime.datetime.strptime(data, "%m/%d/%Y").date
+        day = datetime.datetime.strptime(data, "%m/%d/%Y").date()
         return day
     # フィールド名に対応する時刻を取り出す
     def time(self, フィールド名):

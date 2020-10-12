@@ -23,6 +23,7 @@ class 注文:
             self.提供日 = record.day("DataAPI_食事メニュー::提供日")
             self.発注日 = record.day("DataAPI_食事メニュー::発注日")
             self.種類 = 食事種類型(record.string("DataAPI_食事メニュー::種類"))
+            self.内容 = record.string("DataAPI_食事メニュー::内容")
         if 社員番号:
             self.社員番号 = 社員番号
         if メニューID:

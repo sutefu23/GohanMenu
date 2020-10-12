@@ -51,9 +51,9 @@ class Window(QWidget):
         if not queue.empty():
             idm = queue.get()
             IDカード = IDカードfind(idm)
-            社員 = 社員find(IDカード.社員番号)
-            if 社員 is None:
+            if IDカード is None:
                 QMessageBox.warning(
                     None, "NOT FOUND", u"社員が見つかりません。", QMessageBox.OK)
             else:
+                社員 = 社員find(IDカード.社員番号)
                 self.show_window(社員)

@@ -46,6 +46,7 @@ def waiting_tag(queue: Queue):
         #end while
     except PermissionError as e:
             print(e)
+            return
 
 
 

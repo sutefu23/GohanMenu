@@ -1,10 +1,10 @@
 # This Python file uses the following encoding: utf-8
 import os
 
-from PySide2.QtWidgets import QListWidget, QWidget, QListWidgetItem, QWidgetItem
+from PySide2.QtWidgets import QWidget, QListWidgetItem, QMessageBox
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtGui import QBrush, QFont, QIcon, QColor
+from PySide2.QtGui import QFont, QIcon, QColor, QBrush
 from typing import List
 
 from datetime import date, timedelta, datetime
@@ -17,6 +17,8 @@ from window import 予約状況
 
 import config
 
+IconOn = QIcon("icon/check_on.svg")
+IconOff = QIcon("icon/check_off.svg")
 
 class Window(QWidget):
     メニューリスト: List[メニュー] = None
@@ -47,40 +49,44 @@ class Window(QWidget):
 
         self.plot_data()
 
+
     def order(self, item: QListWidgetItem):
         #発注締切時刻以降は翌日より前のメニューを変更できない
         today = config.デバッグ日付 if config.環境 == "開発" else date.today()
 
         if config.発注締切時刻 <= datetime.now().time() and self.提供日 <=  today + timedelta(days=1):
+            QMessageBox.warning(
+                None, "NOT FOUND", u"社員が見つかりません。", QMessageBox.OK)
             return
 
-        発注メニュー名 = item.text()
-        メニュー検索結果 = list(filter(lambda メニュー: メニュー.内容 == 発注メニュー名, self.メニューリスト))
-        発注メニュー = メニュー検索結果[0]
+        クリックメニュー名 = item.text()
+        メニュー検索結果 = list(
+            filter(lambda メニュー: メニュー.内容 == クリックメニュー名, self.メニューリスト))
+        クリックメニュー = メニュー検索結果[0]
 
-        targetList = None #検索、更新する対象リスト
-        if 発注メニュー.種類 == 食事種類型.朝食:
-            targetList = self.ui.listMorning
-        elif 発注メニュー.種類 == 食事種類型.昼食:
-            targetList = self.ui.listLunch
 
         db = FileMakerDB.system
         db.prepareToken()
-        for i in range(targetList.count()):
-            if targetList.item(i).text() == 発注メニュー.内容:
-                data = 注文(社員番号=self.社員.社員番号,メニューID=発注メニュー.メニューID, 状態=食事要求状態.未処理)
-                if config.環境=="開発":
-                    print("注文", "社員番号:", self.社員.社員番号, "メニューID:", 発注メニュー.メニューID)
-                data.upload()
-                targetList.item(i).setIcon(QIcon("icon/check_on.svg"))
-            else:
-                メニュー検索結果 = list(filter(lambda メニュー: メニュー.内容 == targetList.item(i).text(), self.メニューリスト))
-                注文削除メニュー = メニュー検索結果[0]
-                data = 注文(社員番号=self.社員.社員番号, メニューID=注文削除メニュー.メニューID, 状態=食事要求状態.未処理)
-                data.delete()
-                targetList.item(i).setIcon(QIcon("icon/check_off.svg"))
 
+
+        発注検索結果 = list(
+            filter(lambda 注文: 注文.内容 == クリックメニュー名, self.注文リスト)) #クリックされたデータはすでに発注されたデータである
+        新規注文 = len(発注検索結果) == 0
+
+        #一旦クリア
+        for Order in self.注文リスト:
+            if Order.種類 == クリックメニュー.種類:
+                Order.delete()
+
+        if 新規注文:
+            data = 注文(社員番号=self.社員.社員番号,
+                      メニューID=クリックメニュー.メニューID, 状態=食事要求状態.未処理)
+            if config.環境 == "開発":
+                print('発注:', クリックメニュー名)
+            data.upload()
+ 
         db.logout()
+        self.plot_data()
 
 
     def plot_data(self):
@@ -111,16 +117,19 @@ class Window(QWidget):
                 注文検索結果 = list(filter(lambda 注文: 注文.メニューID == メニュー.メニューID, self.注文リスト))
 
                 if len(注文検索結果) > 0: #注文あり
-                    menuItem.setIcon(QIcon("icon/check_on.svg"))
-                    if date.today() == self.提供日: #今日の提供時間に該当しているものだと色を付ける
-                        if 現在食事種類 == 食事種類型.朝食:
-                            menuItem.setForeground(QColor.red)
-                        else:
-                            menuItem.setForeground(QColor.blue)
-                else: #注文なし
-                    menuItem.setIcon(QIcon("icon/check_off.svg"))
+                    menuItem.setIcon(IconOn)
 
-                # menuItem.itemClicked.connect(lambda: self.update(メニュー, 食事種類))
+                    today = date.today()
+                    if config.環境 == "開発":
+                        today = config.デバッグ日付
+                    if today == self.提供日:  # 今日の提供時間に該当しているものだと色を付ける
+                        if 現在食事種類 == 食事種類:
+                            menuItem.setForeground(QBrush(QColor(0, 0, 255)))
+                        else:
+                            menuItem.setForeground(QBrush(QColor(255, 0, 0)))
+
+                else: #注文なし
+                    menuItem.setIcon(IconOff)
 
                 if 食事種類 == 食事種類型.朝食:
                     self.ui.listMorning.addItem(menuItem)
@@ -147,6 +156,6 @@ class Window(QWidget):
         ui_file.close()
 
     def open_confirm_window(self):
-        self.child_window = 予約状況.Window()
+        self.child_window = 予約状況.Window(self.社員)
         self.child_window.ui.show()
         self.child_window.ui.btnOpenReserve.setVisible(False)

@@ -2,6 +2,7 @@ astroid==2.4.2
 autopep8==1.5.4
 certifi==2020.6.20
 chardet==3.0.4
+fake-rpi==0.2
 flake8==3.8.3
 idna==2.10
 isort==5.5.3
@@ -20,10 +21,12 @@ pyflakes==2.2.0
 pylint==2.6.0
 pyserial==3.4
 PySide2==5.15.1
+python-dotenv==0.14.0
 python-jsonrpc-server==0.4.0
 python-language-server==0.35.1
 requests==2.24.0
 rope==0.17.0
+RPi==0.3.0
 shiboken2==5.15.1
 six==1.15.0
 snowballstemmer==2.0.0

@@ -1,5 +1,9 @@
-import FakeRPi.GPIO as GPIO
-# import RPi.GPIO as GPIO
+import config
+
+if config.環境 == "開発":
+	import FakeRPi.GPIO as GPIO
+else:
+	import RPi.GPIO as GPIO
 
 import time
 

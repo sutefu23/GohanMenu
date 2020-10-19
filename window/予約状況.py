@@ -41,7 +41,11 @@ class Window(QWidget):
 
 
     def reserve(self, item: QTableWidgetItem):
+
         if item.column() == 0 :
+            if item.text() == "":
+                return
+
             注文検索結果 = list(
                 filter(lambda 注文: 注文.提供日.strftime(表示フォーマット) == item.text(), self.注文リスト))
             提供日 = 注文検索結果[0].提供日

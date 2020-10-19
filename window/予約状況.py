@@ -17,7 +17,7 @@ import config
 
 locale.setlocale(locale.LC_TIME, 'ja_JP.UTF-8')
 
-
+表示フォーマット = '%m/%d(%a)'
 class Window(QWidget):
     注文リスト: List[注文]
     予約画面: 食事予約
@@ -36,14 +36,14 @@ class Window(QWidget):
 
     def quit(self):
         self.ui.close()
-        if self.parent() is not None:
+        if self.parent() is not None: 
             self.parent().ui.close()
 
 
     def reserve(self, item: QTableWidgetItem):
         if item.column() == 0 :
             注文検索結果 = list(
-                filter(lambda 注文: 注文.提供日.strftime('%m年%d日(%a)') == item.text(), self.注文リスト))
+                filter(lambda 注文: 注文.提供日.strftime(表示フォーマット) == item.text(), self.注文リスト))
             提供日 = 注文検索結果[0].提供日
             self.ui.close()
             self.予約画面.提供日 = 提供日
@@ -79,7 +79,7 @@ class Window(QWidget):
                 表示日付 = 表示開始日 + timedelta(days=d)
 
                 if 食事種類 == 食事種類型.朝食:
-                    提供日列 = QTableWidgetItem(表示日付.strftime('%m年%d日(%a)'))
+                    提供日列 = QTableWidgetItem(表示日付.strftime(表示フォーマット))
                 else:
                     提供日列 = QTableWidgetItem("")
                 提供日列.setFont(QFont(QFont().defaultFamily(), 24))

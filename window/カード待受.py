@@ -22,6 +22,7 @@ class 待受状態(Enum):
     食事受取 = "食事受取"
 
 class Window(QWidget):
+    child_window: QWidget = None
     def __init__(self, 待受状態):
         self.待受状態 = 待受状態
         super(Window, self).__init__()
@@ -41,6 +42,10 @@ class Window(QWidget):
         ui_file.close()
 
     def show_window(self, 社員: 社員):
+        if self.child_window is not None:
+            self.child_window.quit()
+            
+
         if self.待受状態 == 待受状態.食事予約:
             self.child_window = 食事予約.Window(社員)
         elif self.待受状態 == 待受状態.食事受取:
@@ -50,7 +55,7 @@ class Window(QWidget):
             self.child_window.ui.show()
         else:
             self.child_window.ui.showFullScreen()
-        
+                
 
     def fetch_queue(self):
         if not queue.empty():

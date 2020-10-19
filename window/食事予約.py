@@ -23,7 +23,7 @@ IconOff = QIcon("icon/check_off.svg")
 class Window(QWidget):
     メニューリスト: List[メニュー] = None
     注文リスト: List[注文] = None
-
+    child_window: QWidget = None
     def __init__(self, 社員: 社員, 提供日: date = None):
         super(Window, self).__init__()
         self.load_ui()
@@ -47,6 +47,8 @@ class Window(QWidget):
 
     def quit(self):
         self.ui.close()
+        if self.child_window is not None:
+            self.child_window.quit()
 
 
     def order(self, item: QListWidgetItem):

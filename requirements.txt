@@ -27,7 +27,7 @@ python-language-server==0.35.1
 requests==2.24.0
 rope==0.17.0
 #RPi==0.3.0
-shiboken2==5.15.1
+#shiboken2==5.15.1
 six==1.15.0
 snowballstemmer==2.0.0
 toml==0.10.1

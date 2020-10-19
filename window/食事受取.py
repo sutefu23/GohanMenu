@@ -64,7 +64,9 @@ class Window(QWidget):
         else:
             self.ui.labelMenu.setText(self.注文.内容)
 
-
+    def quit(self):
+        self.ui.close()
+        
     def receive(self):
         db = FileMakerDB.system
         db.prepareToken()

@@ -36,7 +36,8 @@ class Window(QWidget):
 
     def quit(self):
         self.ui.close()
-        self.parent().ui.close()
+        if self.parent() is not None:
+            self.parent().ui.close()
 
 
     def reserve(self, item: QTableWidgetItem):

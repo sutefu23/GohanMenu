@@ -3,9 +3,9 @@ import sys
 import os
 
 
-from PySide2.QtWidgets import QApplication, QWidget
-from PySide2.QtCore import QFile
-from PySide2.QtUiTools import QUiLoader
+from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtCore import QFile
+from PyQt5 import uic
 
 from window import カード待受
 import config 
@@ -24,11 +24,10 @@ class GohanMenu(QWidget):
 
 
     def load_ui(self):
-        loader = QUiLoader()
         path = os.path.join(os.path.dirname(__file__), "main.ui")
         ui_file = QFile(path)
         ui_file.open(QFile.ReadOnly)
-        self.ui = loader.load(ui_file, self)
+        self.ui = uic.loadUi(ui_file, self)
         ui_file.close()
 
     def show_window(self, 待受状態: カード待受.待受状態):

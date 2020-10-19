@@ -2,9 +2,9 @@
 from datetime import datetime
 import os
 
-from PySide2.QtWidgets import QWidget
-from PySide2.QtCore import Qt, QFile
-from PySide2.QtUiTools import QUiLoader
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import Qt, QFile
+from PyQt5 import uic
 from typing import List
 
 import datetime
@@ -75,9 +75,8 @@ class Window(QWidget):
 
 
     def load_ui(self):
-        loader = QUiLoader()
         path = os.path.join(os.path.dirname(__file__), "食事受取.ui")
         ui_file = QFile(path)
         ui_file.open(QFile.ReadOnly)
-        self.ui = loader.load(ui_file, self)
+        self.ui = uic.loadUi(ui_file)
         ui_file.close()

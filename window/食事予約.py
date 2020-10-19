@@ -1,10 +1,10 @@
 # This Python file uses the following encoding: utf-8
 import os
 
-from PySide2.QtWidgets import QWidget, QListWidgetItem, QMessageBox
-from PySide2.QtCore import Qt, QFile
-from PySide2.QtUiTools import QUiLoader
-from PySide2.QtGui import QFont, QIcon, QColor, QBrush
+from PyQt5.QtWidgets import QWidget, QListWidgetItem, QMessageBox
+from PyQt5.QtCore import Qt, QFile
+from PyQt5 import uic
+from PyQt5.QtGui import QFont, QIcon, QColor, QBrush
 from typing import List
 
 from datetime import date, timedelta, datetime
@@ -147,11 +147,10 @@ class Window(QWidget):
 
 
     def load_ui(self):
-        loader = QUiLoader()
         path = os.path.join(os.path.dirname(__file__), "食事予約.ui")
         ui_file = QFile(path)
         ui_file.open(QFile.ReadOnly)
-        self.ui = loader.load(ui_file, self)
+        self.ui = uic.loadUi(ui_file)
         ui_file.close()
 
 

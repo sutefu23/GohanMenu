@@ -1,9 +1,9 @@
 # This Python file uses the following encoding: utf-8
 import os
 
-from PySide2.QtWidgets import QWidget, QMessageBox
-from PySide2.QtCore import QFile, QTimer
-from PySide2.QtUiTools import QUiLoader
+from PyQt5.QtWidgets import QWidget, QMessageBox
+from PyQt5.QtCore import QFile, QTimer
+from PyQt5 import uic
 from enum import Enum
 from queue import Queue
 from threading import Thread
@@ -34,11 +34,10 @@ class Window(QWidget):
         self.timer.start(500)
 
     def load_ui(self):
-        loader = QUiLoader()
         path = os.path.join(os.path.dirname(__file__), "カード待受.ui")
         ui_file = QFile(path)
         ui_file.open(QFile.ReadOnly)
-        self.ui = loader.load(ui_file, self)
+        self.ui = uic.loadUi(ui_file)
         ui_file.close()
 
     def show_window(self, 社員: 社員):

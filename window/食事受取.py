@@ -70,8 +70,8 @@ class Window(QWidget):
     def receive(self):
         db = FileMakerDB.system
         db.prepareToken()
-        data = 注文(社員番号=self.社員.社員番号, メニューID=self.注文.メニューID, 状態=食事要求状態.受取待)
-        data.upload()
+        self.注文.状態 = 食事要求状態.受取待
+        self.注文.upload()
         db.logout()
         self.ui.close()
 

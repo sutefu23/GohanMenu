@@ -11,6 +11,7 @@
 
 
 # pyenv のインストールとパスを追記
+`sudo apt install libffi-dev -y`
 `git clone https://github.com/yyuu/pyenv.git ~/.pyenv`
 
 `sudo vi ~/.profile`
@@ -32,20 +33,15 @@ eval "$(pyenv init -)"
 `pip install --upgrade pip`
 `pip install -r requirements.txt`
 `pip install git+https://github.com/sn4k3/FakeRPi`
+`pip install RPi.GPIO`
 
 # PyQt5をいれる（１.５時間くらいかかる）
 `sudo apt-get install qt-sdk qtbase5-dev libgl1-mesa-dev qt5-default`
 `pip install PyQt5`
 
-# コマンドパスを通す
-`sudo vi ~/.profile`
-#追記
-export PATH="$HOME/.local/bin:$PATH"
-`source ~/.profile`
-
 
 # コマンドをsuユーザーでも使える様に
-`visudo`
+`sudo visudo`
 
 #Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin  コメントアウト
 Defaults    env_keep += "HOME"  # 追加

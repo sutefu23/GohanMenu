@@ -18,7 +18,7 @@ DBName = "DataAPI_8" # pm_osakaname
 #
     # 社員番号に対応する社員オブジェクトを返す
 def find(社員番号):
-    query = [{"社員番号": 社員番号}] 
+    query = [{"社員番号": "=="+社員番号}] 
     db = FileMakerDB.pm_osakaname
     db.prepareToken()
     list = db.find(DBName, query)

@@ -4,8 +4,8 @@ import nfc
 import binascii
 import time
 from queue import Queue
-from util import sound
-
+from util.sound import SOUND
+from util.counter import Timer
 
 def waiting_tag(queue: Queue):
 
@@ -28,13 +28,14 @@ def waiting_tag(queue: Queue):
             TIME_interval = 0.2
             target_res = clf.sense(target_req_nfc, target_req_felica, iterations=int(TIME_cycle//TIME_interval)+1, interval=TIME_interval)
             if not target_res is None:
-                beep = sound.SOUND()
+                beep = SOUND()
                 beep.onRead()
 
                 tag = nfc.tag.activate(clf, target_res)
 
                 idm = str(tag.identifier).encode().hex().upper()
-    
+                counter = Timer()
+                counter.measure("読み取り開始時間")
                 queue.put(idm)
 
                 print('Card detected. idm = ' + str(idm))

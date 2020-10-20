@@ -2,9 +2,9 @@
 import os
 
 from PyQt5.QtWidgets import QWidget, QListWidgetItem, QMessageBox
-from PyQt5.QtCore import Qt, QFile
+from PyQt5.QtCore import Qt, QFile, QSize
 from PyQt5 import uic
-from PyQt5.QtGui import QFont, QIcon, QColor, QBrush
+from PyQt5.QtGui import QFont, QIcon, QColor, QBrush, QPixmap
 from typing import List
 
 from datetime import date, timedelta, datetime
@@ -16,9 +16,6 @@ from object import FileMakerDB
 from window import 予約状況
 
 import config
-
-IconOn = QIcon("icon/check_on.svg")
-IconOff = QIcon("icon/check_off.svg")
 
 class Window(QWidget):
     メニューリスト: List[メニュー] = None
@@ -42,6 +39,14 @@ class Window(QWidget):
         )
         self.ui.listMorning.itemClicked.connect(self.order)
         self.ui.listLunch.itemClicked.connect(self.order)
+
+        PixMapOn = QPixmap("icon/check_on.svg")
+        PixMapOff = QPixmap("icon/check_off.svg")
+        scaledOn = PixMapOn.scaled(QSize(64, 64), Qt.KeepAspectRatio, Qt.SmoothTransformation )
+        scaledOff = PixMapOff.scaled(QSize(64, 64), Qt.KeepAspectRatio, Qt.SmoothTransformation )
+
+        self.IconOn = QIcon(scaledOn)
+        self.IconOff = QIcon(scaledOff)
 
         self.plot_data()
 
@@ -113,12 +118,12 @@ class Window(QWidget):
             メニューリスト = list(filter(lambda メニュー: メニュー.種類 == 食事種類, self.メニューリスト))
             for メニュー in メニューリスト:
                 menuItem = QListWidgetItem(メニュー.内容)
-                menuItem.setFont(QFont(QFont().defaultFamily(), 24))
+                menuItem.setFont(QFont(QFont().defaultFamily(), 48))
 
                 注文検索結果 = list(filter(lambda 注文: 注文.メニューID == メニュー.メニューID, self.注文リスト))
 
                 if len(注文検索結果) > 0: #注文あり
-                    menuItem.setIcon(IconOn)
+                    menuItem.setIcon(self.IconOn)
 
                     today = date.today()
                     if config.環境 == "開発":
@@ -130,8 +135,7 @@ class Window(QWidget):
                             menuItem.setForeground(QBrush(QColor(255, 0, 0)))
 
                 else: #注文なし
-                    menuItem.setIcon(IconOff)
-
+                    menuItem.setIcon(self.IconOff)
                 if 食事種類 == 食事種類型.朝食:
                     self.ui.listMorning.addItem(menuItem)
                 elif 食事種類 == 食事種類型.昼食:

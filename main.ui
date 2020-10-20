@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>600</height>
+    <width>1920</width>
+    <height>1080</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,15 +16,15 @@
   <widget class="QPushButton" name="btnOpenReserve">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>110</y>
-     <width>661</width>
-     <height>101</height>
+     <x>330</x>
+     <y>160</y>
+     <width>1232</width>
+     <height>202</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>24</pointsize>
+     <pointsize>48</pointsize>
     </font>
    </property>
    <property name="text">
@@ -34,15 +34,15 @@
   <widget class="QPushButton" name="btnOpenReceive">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>330</y>
-     <width>661</width>
-     <height>111</height>
+     <x>330</x>
+     <y>550</y>
+     <width>1232</width>
+     <height>202</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>24</pointsize>
+     <pointsize>48</pointsize>
     </font>
    </property>
    <property name="text">

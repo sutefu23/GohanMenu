@@ -64,23 +64,23 @@ def find(query):
 
 def find提供日(提供日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(提供日)
-    query = [{"DataAPI_食事メニュー::提供日": daystr, "社員番号": 社員番号}]
+    query = [{"DataAPI_食事メニュー::提供日": "=="+daystr, "社員番号": "=="+社員番号}]
     return find(query)
 
 
 def find提供日以降(開始日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(開始日)
-    query = [{"DataAPI_食事メニュー::提供日": f">={daystr}", "社員番号": 社員番号}]
+    query = [{"DataAPI_食事メニュー::提供日": f">={daystr}", "社員番号": "=="+社員番号}]
     return find(query)
 
 def find発注日(発注日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(発注日)
-    query = [{"DataAPI_食事メニュー::発注日": daystr, "社員番号": 社員番号}]
+    query = [{"DataAPI_食事メニュー::発注日": "=="+daystr, "社員番号": "=="+社員番号}]
     return find(query)
 
 def find発注日以降(開始日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(開始日)
-    query = [{"DataAPI_食事メニュー::発注日": f">={daystr}", "社員番号": 社員番号}]
+    query = [{"DataAPI_食事メニュー::発注日": f">={daystr}", "社員番号": "=="+社員番号}]
     return find(query)
 
 #テスト

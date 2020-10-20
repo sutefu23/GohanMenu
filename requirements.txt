@@ -32,6 +32,6 @@ six==1.15.0
 snowballstemmer==2.0.0
 toml==0.10.1
 #ujson==3.2.0
-urllib3==1.25.10
+#urllib3==1.25.10
 #wrapt==1.12.1
 #yapf==0.30.0

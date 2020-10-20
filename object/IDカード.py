@@ -16,7 +16,7 @@ DBName = "DataAPI_8" # systemn
 
 # カードIDに対応するIDカードオブジェクトを返す
 def find(カードID) -> IDカード:
-    query = [{"カードID": カードID}] 
+    query = [{"カードID": "==" + カードID}] 
     db = FileMakerDB.system
     db.prepareToken()
     list = db.find(DBName, query)

@@ -86,11 +86,11 @@ class Window(QWidget):
                     提供日列 = QTableWidgetItem(表示日付.strftime(表示フォーマット))
                 else:
                     提供日列 = QTableWidgetItem("")
-                提供日列.setFont(QFont(QFont().defaultFamily(), 24))
+                提供日列.setFont(QFont(QFont().defaultFamily(), 48))
                 self.ui.tableWidget.setItem(row, 0, 提供日列)  # 提供日
                 
                 種類列 = QTableWidgetItem(食事種類.value)
-                種類列.setFont(QFont(QFont().defaultFamily(), 24))
+                種類列.setFont(QFont(QFont().defaultFamily(), 48))
                 種類列.setTextAlignment(Qt.AlignCenter)
                 self.ui.tableWidget.setItem(row, 1, 種類列)  # 朝夕
 
@@ -109,7 +109,7 @@ class Window(QWidget):
                 else:
                     メニュー名列 = QTableWidgetItem(u"予約なし")
 
-                メニュー名列.setFont(QFont(QFont().defaultFamily(), 24))
+                メニュー名列.setFont(QFont(QFont().defaultFamily(), 48))
                 self.ui.tableWidget.setItem(row, 2, メニュー名列)  # メニュー名 or 予約なし
 
                 row += 1

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
-    <height>600</height>
+    <width>1920</width>
+    <height>1080</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,15 +17,15 @@
    <widget class="QPushButton" name="btnGoBack">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>530</y>
-      <width>291</width>
-      <height>51</height>
+      <x>760</x>
+      <y>930</y>
+      <width>381</width>
+      <height>121</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="text">
@@ -35,15 +35,15 @@
    <widget class="QPushButton" name="btnOpenReserve">
     <property name="geometry">
      <rect>
-      <x>860</x>
-      <y>10</y>
-      <width>141</width>
-      <height>61</height>
+      <x>1610</x>
+      <y>20</y>
+      <width>261</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
+      <pointsize>48</pointsize>
      </font>
     </property>
     <property name="text">
@@ -54,9 +54,9 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>80</y>
-      <width>951</width>
-      <height>441</height>
+      <y>110</y>
+      <width>1831</width>
+      <height>791</height>
      </rect>
     </property>
     <property name="horizontalScrollBarPolicy">
@@ -72,10 +72,10 @@
      <bool>false</bool>
     </attribute>
     <attribute name="horizontalHeaderMinimumSectionSize">
-     <number>23</number>
+     <number>60</number>
     </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>150</number>
+     <number>300</number>
     </attribute>
     <attribute name="horizontalHeaderStretchLastSection">
      <bool>true</bool>
@@ -87,7 +87,7 @@
      <number>23</number>
     </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
-     <number>30</number>
+     <number>60</number>
     </attribute>
     <row>
      <property name="text">
@@ -95,7 +95,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
     </row>
@@ -105,7 +105,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
     </row>
@@ -115,7 +115,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
     </column>
@@ -125,7 +125,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
      <property name="textAlignment">
@@ -138,7 +138,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
     </column>
@@ -148,7 +148,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
      <property name="flags">
@@ -161,7 +161,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
      <property name="textAlignment">
@@ -177,7 +177,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
      <property name="flags">
@@ -188,6 +188,11 @@
      <property name="text">
       <string/>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>48</pointsize>
+      </font>
+     </property>
     </item>
     <item row="1" column="1">
      <property name="text">
@@ -195,7 +200,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
      <property name="textAlignment">
@@ -208,7 +213,7 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>24</pointsize>
+       <pointsize>48</pointsize>
       </font>
      </property>
     </item>

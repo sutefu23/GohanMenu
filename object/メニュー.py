@@ -50,7 +50,7 @@ def findメニューID(メニューID: str):
 # 指定された提供日のメニュー
 def find提供日(提供日: date):
     daystr = FileMakerDB.makeDayString(提供日)
-    query = [{"提供日": daystr}]
+    query = [{"提供日": "=="+daystr}]
     return find(query)
 
 # 指定された日にちか、それ以降の提供日のメニュー

@@ -25,7 +25,7 @@ eval "$(pyenv init -)"
 `pyenv global 3.8.5`
 
 # GohanMenuダウンロード
-`git pull https://github.com/osakaname/GohanMenu.git`
+`git clone https://github.com/osakaname/GohanMenu.git`
 `cd GohanMenu`
 
 # パッケージの一括インストール
@@ -34,6 +34,7 @@ eval "$(pyenv init -)"
 `pip install git+https://github.com/sn4k3/FakeRPi`
 
 # PyQt5をいれる（１.５時間くらいかかる）
+`sudo apt-get install qt-sdk qtbase5-dev libgl1-mesa-dev qt5-default`
 `pip install PyQt5`
 
 # コマンドパスを通す

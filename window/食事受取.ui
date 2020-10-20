@@ -37,7 +37,7 @@
      <rect>
       <x>30</x>
       <y>50</y>
-      <width>511</width>
+      <width>731</width>
       <height>81</height>
      </rect>
     </property>
@@ -47,7 +47,7 @@
      </font>
     </property>
     <property name="text">
-     <string>大阪　太郎</string>
+     <string>グエンゴックかー</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -56,8 +56,8 @@
    <widget class="QLabel" name="labelText">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>60</y>
+      <x>400</x>
+      <y>140</y>
       <width>411</width>
       <height>71</height>
      </rect>

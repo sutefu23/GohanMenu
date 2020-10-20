@@ -97,7 +97,10 @@ class Window(QWidget):
         if self.提供日 is None: #デフォルトでは今日発注のものを表示
             today = date.today() if config.環境 == "本番" else config.デバッグ日付
             self.注文リスト = find注文発注日(today, self.社員.社員番号)
-            self.提供日 = self.注文リスト[0].提供日
+            if len(self.注文リスト) > 0:
+                self.提供日 = self.注文リスト[0].提供日
+            else:
+                self.提供日 = today
         else:
             self.注文リスト = find注文提供日(self.提供日, self.社員.社員番号)
 

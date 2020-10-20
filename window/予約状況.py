@@ -62,7 +62,10 @@ class Window(QWidget):
             表示開始日 = config.デバッグ日付
 
         self.注文リスト = find注文提供日以降(開始日=表示開始日,社員番号=self.社員.社員番号)
-
+        
+        if len(self.注文リスト) == 0:
+            return
+            
         max提供日メニューID = max(注文.メニューID for 注文 in self.注文リスト)
 
         注文検索結果 = list(

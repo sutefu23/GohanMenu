@@ -8,7 +8,6 @@ from util.sound import SOUND
 from util.counter import Timer
 
 def waiting_tag(queue: Queue):
-
     # タッチされてから次の待ち受けを開始するまで無効化する秒
     TIME_wait = 3
 
@@ -16,10 +15,12 @@ def waiting_tag(queue: Queue):
     target_req_felica = nfc.clf.RemoteTarget("212F")
 
     target_req_nfc = nfc.clf.RemoteTarget("106A")
-    
+
+    prev_idm = ""
+
     print("Waiting for Tag...")
-    try:
-        while True:
+    while True:
+        try:
             # USBに接続されたNFCリーダに接続
             clf = nfc.ContactlessFrontend('usb:054c:06c3')
             # 待ち受けの1サイクル秒
@@ -34,19 +35,17 @@ def waiting_tag(queue: Queue):
                 tag = nfc.tag.activate(clf, target_res)
 
                 idm = str(tag.identifier).encode().hex().upper()
-                counter = Timer()
-                counter.measure("読み取り開始時間")
-                queue.put(idm)
+                if idm != prev_idm:
+                    queue.put(idm)
+                    print('Card detected. idm = ' + str(idm))
+                    prev_idm = idm
 
-                print('Card detected. idm = ' + str(idm))
                 print('sleep ' + str(TIME_wait) + ' seconds')
                 time.sleep(TIME_wait)
-
-            clf.close()
-        #end while
-    except PermissionError as e:
+        except PermissionError as e:
             print(e)
-            return
-
-
+            continue
+        finally:
+            if clf is not None:
+                clf.close()
 

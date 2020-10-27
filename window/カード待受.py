@@ -59,12 +59,7 @@ class Window(QWidget):
     def fetch_queue(self):
         if not queue.empty():
             idm = queue.get()
-            counter = Timer()
-            counter.measure("待受画面Que受け取り")
-
             IDカード = IDカードfind(idm)
-            counter.measure("IDカードfind")
             if IDカード is not None:
                 社員 = 社員find(IDカード.社員番号)
-                counter.measure("社員find")
                 self.show_window(社員)

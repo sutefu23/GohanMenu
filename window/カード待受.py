@@ -64,10 +64,7 @@ class Window(QWidget):
 
             IDカード = IDカードfind(idm)
             counter.measure("IDカードfind")
-            if IDカード is None:
-                QMessageBox.warning(
-                    None, "NOT FOUND", u"社員が見つかりません。")
-            else:
+            if IDカード is not None:
                 社員 = 社員find(IDカード.社員番号)
                 counter.measure("社員find")
                 self.show_window(社員)

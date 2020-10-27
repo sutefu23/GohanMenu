@@ -55,3 +55,26 @@ Defaults    env_keep += "PYENV_ROOT"  # 追加
 Raspberry Pi の再起動
 メニュー > 設定 > Screensaver を選択
 「モード」>「ブランク・スクリーンのみ」で分数を指定
+
+# gitをSSHで接続する設定
+(keyファイルを配置した上で)
+`vi ~/.ssh/config`
+
+Host github.com`
+	User git
+  Hostname github.com
+	IdentityFile ~/.ssh/key/git.secret
+
+
+`git remote set-url origin git@github.com:osakaname/GohanMenu.git`
+
+#　自動pullおよび起動設定
+`mkdir -p ~/.config/lxsession/LXDE-pi`
+`cp /etc/xdg/lxsession/LXDE-pi/autostart ~/.config/lxsession/LXDE-pi/`
+
+`vi ~/.config/lxsession/LXDE-pi/`
+
+cd /home/pi/GohanMenu
+git --git-dir=.git pull origin master
+
+sudo python /home/pi/GohanMenu/main.py

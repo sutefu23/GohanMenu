@@ -99,8 +99,8 @@ class Window(QWidget):
             self.注文リスト = find注文発注日(today, self.社員.社員番号)
             if len(self.注文リスト) > 0:
                 self.提供日 = self.注文リスト[0].提供日
-            else:
-                self.提供日 = today
+            else: #今日注文したものがない場合は翌日提供日のメニューを出すのがデフォルト
+                self.提供日 = today + timedelta(days=1)
         else:
             self.注文リスト = find注文提供日(self.提供日, self.社員.社員番号)
 

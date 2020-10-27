@@ -32,7 +32,7 @@
      <enum>Qt::LeftToRight</enum>
     </property>
     <property name="text">
-     <string>社員カードをかざしてください</string>
+     <string>食堂カードをかざしてください</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>

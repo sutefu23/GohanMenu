@@ -1,0 +1,14 @@
+[Unit]
+Description=GohanMenu
+After=network.target
+
+[Service]
+ExecStart=git pull
+WorkingDirectory=/home/pi/GohanMenu
+StandardOutput=inherit
+StandardError=inherit
+Type=simple
+User=pi
+
+[Install]
+WantedBy=multi-user.target

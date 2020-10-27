@@ -70,11 +70,9 @@ Host github.com`
 
 #　自動pullおよび起動設定
 `mkdir -p ~/.config/lxsession/LXDE-pi`
-`cp /etc/xdg/lxsession/LXDE-pi/autostart ~/.config/lxsession/LXDE-pi/`
+`cp /home/pi/GohanMenu/autostart ~/.config/lxsession/LXDE-pi/`
 
-`vi ~/.config/lxsession/LXDE-pi/`
 
-cd /home/pi/GohanMenu
-git --git-dir=.git pull origin master
+`sudo cp /home/pi/GohanMenu/GohanMenu.service /etc/systemd/system/`
+`sudo systemctl enable GohanMenu`
 
-sudo python /home/pi/GohanMenu/main.py

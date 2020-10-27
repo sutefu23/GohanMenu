@@ -3,7 +3,7 @@ Description=GohanMenu
 After=network.target
 
 [Service]
-ExecStart=git pull
+ExecStart=sh autopull.sh
 WorkingDirectory=/home/pi/GohanMenu
 StandardOutput=inherit
 StandardError=inherit

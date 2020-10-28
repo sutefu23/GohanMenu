@@ -2,8 +2,8 @@
 import os
 from PyQt5.QtGui import QFont, QColor, QBrush
 from PyQt5 import uic
-from PyQt5.QtCore import Qt, QFile
-from PyQt5.QtWidgets import QWidget, QTableWidgetItem
+from PyQt5.QtCore import Qt, QFile, QVariant
+from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QScroller, QScrollerProperties
 
 from datetime import date, datetime, timedelta
 from typing import List
@@ -33,6 +33,14 @@ class Window(QWidget):
         self.ui.tableWidget.itemClicked.connect(self.reserve)
         self.plot_data()
 
+        # タッチスクロール設定
+        QScroller.grabGesture(self.ui.tableWidget, QScroller.LeftMouseButtonGesture)
+        scroller = QScroller.scroller(self.ui.tableWidget)
+        props = scroller.scrollerProperties()
+        props.setScrollMetric(QScrollerProperties.MaximumVelocity, 0.5)
+        scroller.setScrollerProperties(props)
+
+
     def quit(self):
         self.ui.close()
         if self.parent() is not None: 
@@ -40,7 +48,6 @@ class Window(QWidget):
 
 
     def reserve(self, item: QTableWidgetItem):
-
         if item.column() == 0 :
             if item.text() == "":
                 return
@@ -70,6 +77,7 @@ class Window(QWidget):
         max提供日 = 注文検索結果[0].提供日
     
         表示日数 = (max提供日 - 表示開始日).days + 1
+
         self.ui.tableWidget.setRowCount(表示日数 * len(食事種類型))
 
         if(datetime.now().time() <= config.朝食期限時刻):

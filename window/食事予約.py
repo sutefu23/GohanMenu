@@ -148,7 +148,7 @@ class Window(QWidget):
 
     def setStatus(self, item: QTableWidgetItem, status: checkStatus):
         if status == checkStatus.On:
-            item.setText("●" + item.text())
+            item.setText("✅" + item.text())
         else:
             item.setText("　" + item.text())
 

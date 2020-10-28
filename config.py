@@ -13,7 +13,7 @@ if len(sys.argv) > 1 and sys.argv[1] == "dev":
 else:
 	環境 = "本番"  # 開発 or 本番
 
-for i in range(100):
+for i in range(1000):
 	if keyboard.is_pressed("shift"):
 		環境 = "開発"
 		break

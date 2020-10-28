@@ -1,7 +1,7 @@
 import datetime
 import sys
 
-if sys.argv[1] == "dev":
+if len(sys.argv) > 1 and sys.argv[1] == "dev":
 	環境 = "開発"  # 開発 or 本番
 else:
 	環境 = "本番"  # 開発 or 本番

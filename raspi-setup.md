@@ -73,6 +73,3 @@ Host github.com`
 `cp /home/pi/GohanMenu/autostart ~/.config/lxsession/LXDE-pi/`
 
 
-`sudo cp /home/pi/GohanMenu/GohanMenu.service /etc/systemd/system/`
-`sudo systemctl enable GohanMenu`
-

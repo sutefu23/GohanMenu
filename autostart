@@ -1,4 +1,4 @@
 @lxpanel --profile LXDE-pi
 @pcmanfm --desktop --profile LXDE-pi
 @xscreensaver -no-splash
-sudo python /home/pi/GohanMenu/main.py
+sh /home/pi/GohanMenu/autostart.sh

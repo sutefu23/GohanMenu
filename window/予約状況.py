@@ -11,7 +11,6 @@ from window import 食事予約
 from object.注文 import 注文, 食事種類型, find提供日以降 as find注文提供日以降
 from object.社員 import 社員
 
-from pprint import pprint
 import locale
 import config
 

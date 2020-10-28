@@ -1,14 +1,14 @@
 # This Python file uses the following encoding: utf-8
 import os
 
-from PyQt5.QtWidgets import QWidget, QListWidgetItem, QMessageBox
-from PyQt5.QtCore import Qt, QFile, QSize
+from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QListWidgetItem, QMessageBox
+from PyQt5.QtCore import Qt, QFile
 from PyQt5 import uic
-from PyQt5.QtGui import QFont, QIcon, QColor, QBrush, QPixmap
+from PyQt5.QtGui import QFont, QColor, QBrush
 from typing import List
 
 from datetime import date, timedelta, datetime
-
+from enum import Enum
 from object.メニュー import メニュー, 食事種類型, find提供日 as findメニュー提供日
 from object.注文 import 注文, 食事要求状態, find提供日 as find注文提供日, find発注日 as find注文発注日
 from object.社員 import 社員
@@ -16,6 +16,11 @@ from object import FileMakerDB
 from window import 予約状況
 
 import config
+
+
+class checkStatus(Enum):
+    On = "On"
+    Off = "Off"
 
 class Window(QWidget):
     メニューリスト: List[メニュー] = None
@@ -40,14 +45,6 @@ class Window(QWidget):
         self.ui.listMorning.itemClicked.connect(self.order)
         self.ui.listLunch.itemClicked.connect(self.order)
 
-        PixMapOn = QPixmap("icon/check_on.svg")
-        PixMapOff = QPixmap("icon/check_off.svg")
-        scaledOn = PixMapOn.scaled(QSize(64, 64), Qt.KeepAspectRatio, Qt.SmoothTransformation )
-        scaledOff = PixMapOff.scaled(QSize(64, 64), Qt.KeepAspectRatio, Qt.SmoothTransformation )
-
-        self.IconOn = QIcon(scaledOn)
-        self.IconOff = QIcon(scaledOff)
-
         self.plot_data()
 
     def quit(self):
@@ -66,7 +63,8 @@ class Window(QWidget):
                 None, "NOT PERMITTED", u"予約変更期限を過ぎています")
             return
 
-        クリックメニュー名 = item.text()
+        クリックメニュー名 = item.data(Qt.UserRole)  # hidden data
+
         メニュー検索結果 = list(
             filter(lambda メニュー: メニュー.内容 == クリックメニュー名, self.メニューリスト))
         クリックメニュー = メニュー検索結果[0]
@@ -122,12 +120,13 @@ class Window(QWidget):
             メニューリスト = list(filter(lambda メニュー: メニュー.種類 == 食事種類, self.メニューリスト))
             for メニュー in メニューリスト:
                 menuItem = QListWidgetItem(メニュー.内容)
+                menuItem.setData(Qt.UserRole, メニュー.内容) # hidden data
                 menuItem.setFont(QFont(QFont().defaultFamily(), 48))
 
                 注文検索結果 = list(filter(lambda 注文: 注文.メニューID == メニュー.メニューID, self.注文リスト))
 
                 if len(注文検索結果) > 0: #注文あり
-                    menuItem.setIcon(self.IconOn)
+                    self.setStatus(menuItem, checkStatus.On)
 
                     today = date.today()
                     if config.環境 == "開発":
@@ -139,13 +138,20 @@ class Window(QWidget):
                             menuItem.setForeground(QBrush(QColor(255, 0, 0)))
 
                 else: #注文なし
-                    menuItem.setIcon(self.IconOff)
+                    self.setStatus(menuItem, checkStatus.Off)
+
                 if 食事種類 == 食事種類型.朝食:
                     self.ui.listMorning.addItem(menuItem)
                 elif 食事種類 == 食事種類型.昼食:
                     self.ui.listLunch.addItem(menuItem)
 
-    
+
+    def setStatus(self, item: QTableWidgetItem, status: checkStatus):
+        if status == checkStatus.On:
+            item.setText("●" + item.text())
+        else:
+            item.setText("　" + item.text())
+
     def move_next(self):
         self.提供日 = self.提供日 + timedelta(days=1)
         self.plot_data()

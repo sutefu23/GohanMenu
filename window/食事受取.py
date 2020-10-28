@@ -3,7 +3,7 @@ from datetime import datetime
 import os
 
 from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import Qt, QFile
+from PyQt5.QtCore import Qt, QFile, QTimer
 from PyQt5 import uic
 from typing import List
 
@@ -14,6 +14,8 @@ from object.注文 import 注文, find提供日, 食事要求状態
 from object import FileMakerDB
 
 import config
+
+TIMEOUT_MINUTE = 1
 
 class Window(QWidget):
     社員:社員 = None
@@ -46,23 +48,24 @@ class Window(QWidget):
         
         self.ui.btnGoBack.clicked.connect(
             lambda: self.ui.close())
-        self.ui.btnReceive.clicked.connect(
-            lambda: self.receive())
         self.plot_data()
+
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.quit)
+        self.timer.start(TIMEOUT_MINUTE * 60 * 1000)
 
         
     def plot_data(self):
         self.ui.labelName.setText(self.社員.社員名称)
         if self.注文 is None:
             self.ui.labelMenu.setText(u"予約がありません")
-            self.ui.btnReceive.setVisible(False)
             print("注文なし")
-        elif self.注文.状態 != 食事要求状態.未処理:
-            self.ui.labelMenu.setText(u"受取済")
-            self.ui.btnReceive.setVisible(False)
-            print("受取済")
-        else:
+        elif self.注文.状態 == 食事要求状態.未処理:
             self.ui.labelMenu.setText(self.注文.内容)
+            self.receive()
+        else:
+            self.ui.labelMenu.setText(u"受取済")
+            print("受取済")
 
     def quit(self):
         self.ui.close()
@@ -73,7 +76,6 @@ class Window(QWidget):
         self.注文.状態 = 食事要求状態.受取待
         self.注文.upload()
         db.logout()
-        self.ui.close()
 
 
     def load_ui(self):

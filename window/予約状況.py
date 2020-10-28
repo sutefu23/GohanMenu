@@ -11,7 +11,7 @@ from window import 食事予約
 from object.注文 import 注文, 食事種類型, find提供日以降 as find注文提供日以降
 from object.社員 import 社員
 
-
+from pprint import pprint
 import locale
 import config
 
@@ -45,10 +45,8 @@ class Window(QWidget):
         if item.column() == 0 :
             if item.text() == "":
                 return
-
-            注文検索結果 = list(
-                filter(lambda 注文: 注文.提供日.strftime(表示フォーマット) == item.text(), self.注文リスト))
-            提供日 = 注文検索結果[0].提供日
+            
+            提供日 = item.data(Qt.UserRole)
             self.ui.close()
             self.予約画面.提供日 = 提供日
             self.予約画面.plot_data()
@@ -90,6 +88,7 @@ class Window(QWidget):
                 else:
                     提供日列 = QTableWidgetItem("")
                 提供日列.setFont(QFont(QFont().defaultFamily(), 48))
+                提供日列.setData(Qt.UserRole,表示日付)
                 self.ui.tableWidget.setItem(row, 0, 提供日列)  # 提供日
                 
                 種類列 = QTableWidgetItem(食事種類.value)

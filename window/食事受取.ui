@@ -29,7 +29,7 @@
      </font>
     </property>
     <property name="text">
-     <string>終了</string>
+     <string>閉じる</string>
     </property>
    </widget>
    <widget class="QLabel" name="labelName">
@@ -75,7 +75,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>280</y>
+      <y>430</y>
       <width>1611</width>
       <height>251</height>
      </rect>
@@ -90,24 +90,6 @@
     </property>
     <property name="alignment">
      <set>Qt::AlignHCenter|Qt::AlignTop</set>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnReceive">
-    <property name="geometry">
-     <rect>
-      <x>640</x>
-      <y>600</y>
-      <width>621</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>72</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>受け取り</string>
     </property>
    </widget>
   </widget>

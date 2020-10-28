@@ -6,6 +6,8 @@ import time
 from queue import Queue
 from util.sound import SOUND
 from util.counter import Timer
+from PyQt5.QtWidgets import QMessageBox
+
 
 def waiting_tag(queue: Queue):
     # タッチされてから次の待ち受けを開始するまで無効化する秒
@@ -45,7 +47,10 @@ def waiting_tag(queue: Queue):
         except PermissionError as e:
             print(e)
             continue
+        except IOError as e:
+
+            break
         finally:
-            if clf is not None:
+            if 'clf' in locals() and clf is not None:
                 clf.close()
 

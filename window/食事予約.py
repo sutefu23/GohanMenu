@@ -51,6 +51,7 @@ class Window(QWidget):
         self.plot_data()
 
     def quit(self):
+        self.社員 = None
         self.ui.close()
         if self.child_window is not None:
             self.child_window.quit()

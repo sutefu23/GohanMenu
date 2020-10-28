@@ -68,6 +68,7 @@ class Window(QWidget):
             print("受取済")
 
     def quit(self):
+        self.社員 = None
         self.ui.close()
         
     def receive(self):

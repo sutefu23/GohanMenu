@@ -42,10 +42,7 @@ class Window(QWidget):
         self.ui = uic.loadUi(ui_file)
         ui_file.close()
 
-    def show_window(self, 社員: 社員):
-        if self.child_window is not None:
-            self.child_window.quit()
-            
+    def show_window(self, 社員: 社員):            
         if self.待受状態 == 待受状態.食事予約:
             self.child_window = 食事予約.Window(社員)
         elif self.待受状態 == 待受状態.食事受取:
@@ -61,8 +58,14 @@ class Window(QWidget):
         if not queue.empty():
             idm = queue.get()
             IDカード = IDカードfind(idm)
-            if IDカード is not None:
-                社員 = 社員find(IDカード.社員番号)
-                if self.child_window is not None and self.child_window.社員 == 社員: #すでに開いた画面で同じ社員が表示中
+            if IDカード is None:
+                return
+            社員 = 社員find(IDカード.社員番号)
+            if self.child_window is not None:
+                if self.child_window.社員 is not None and self.child_window.社員.社員番号 == 社員.社員番号:  # すでに開いた画面で同じ社員が表示中
+                    print("同じ社員が表示")
                     return
-                self.show_window(社員)
+                else:
+                    self.child_window.quit()
+
+            self.show_window(社員)

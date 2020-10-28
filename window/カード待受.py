@@ -23,6 +23,7 @@ class 待受状態(Enum):
 
 class Window(QWidget):
     child_window: QWidget = None
+    prev_idm = 0
     def __init__(self, 待受状態):
         self.待受状態 = 待受状態
         super(Window, self).__init__()
@@ -62,4 +63,6 @@ class Window(QWidget):
             IDカード = IDカードfind(idm)
             if IDカード is not None:
                 社員 = 社員find(IDカード.社員番号)
+                if self.child_window is not None and self.child_window.社員 == 社員: #すでに開いた画面で同じ社員が表示中
+                    return
                 self.show_window(社員)

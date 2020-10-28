@@ -18,8 +18,6 @@ def waiting_tag(queue: Queue):
 
     target_req_nfc = nfc.clf.RemoteTarget("106A")
 
-    prev_idm = ""
-
     print("Waiting for Tag...")
     while True:
         try:
@@ -37,10 +35,8 @@ def waiting_tag(queue: Queue):
                 tag = nfc.tag.activate(clf, target_res)
 
                 idm = str(tag.identifier).encode().hex().upper()
-                if idm != prev_idm:
-                    queue.put(idm)
-                    print('Card detected. idm = ' + str(idm))
-                    prev_idm = idm
+                queue.put(idm)
+                print('Card detected. idm = ' + str(idm))
 
                 print('sleep ' + str(TIME_wait) + ' seconds')
                 time.sleep(TIME_wait)

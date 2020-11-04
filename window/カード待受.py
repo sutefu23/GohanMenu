@@ -7,6 +7,7 @@ from PyQt5 import uic
 from enum import Enum
 from queue import Queue
 from threading import Thread
+import subprocess
 
 from util.read import waiting_tag
 from util.sound import SOUND
@@ -57,6 +58,8 @@ class Window(QWidget):
 
     def fetch_queue(self):
         if not queue.empty():
+            reaction_thread = Thread(target=self.do_reaction)
+            reaction_thread.start()
             idm = queue.get()
             IDカード = IDカードfind(idm)
             if IDカード is None:
@@ -69,6 +72,14 @@ class Window(QWidget):
                 else:
                     self.child_window.quit()
 
+            self.show_window(社員)
+
+    def do_reaction(self):
             beep = SOUND()
             beep.onRead()
-            self.show_window(社員)
+
+            #　スクリーンセーバーの状態確認と消去
+            proc = subprocess.run(["xscreensaver-command","-time"], stdout = subprocess.PIPE, stderr = subprocess.PIPE )
+            stdout = proc.stdout.decode("utf8")
+            if "screen blanked" in stdout :
+                subprocess.run(["xscreensaver-command","-restart"])

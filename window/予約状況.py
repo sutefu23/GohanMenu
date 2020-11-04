@@ -95,6 +95,7 @@ class Window(QWidget):
                     提供日列 = QTableWidgetItem("")
                 提供日列.setFont(QFont(QFont().defaultFamily(), 48))
                 提供日列.setData(Qt.UserRole,表示日付)
+                提供日列.setSize
                 self.ui.tableWidget.setItem(row, 0, 提供日列)  # 提供日
                 
                 種類列 = QTableWidgetItem(食事種類.value)

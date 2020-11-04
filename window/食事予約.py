@@ -105,7 +105,7 @@ class Window(QWidget):
 
         self.メニューリスト = findメニュー提供日(self.提供日)
 
-        self.ui.labelToday.setText(date.strftime(self.提供日, '%m月%d日'))
+        self.ui.labelToday.setText(date.strftime(self.提供日, '%m月%d日(%a)'))
         self.ui.labelStaffName.setText(self.社員.社員名称)
 
         self.ui.listMorning.clear()

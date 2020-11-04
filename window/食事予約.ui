@@ -19,7 +19,7 @@
      <rect>
       <x>30</x>
       <y>50</y>
-      <width>281</width>
+      <width>491</width>
       <height>91</height>
      </rect>
     </property>
@@ -35,7 +35,7 @@
    <widget class="QPushButton" name="btnPrevDay">
     <property name="geometry">
      <rect>
-      <x>380</x>
+      <x>550</x>
       <y>50</y>
       <width>261</width>
       <height>91</height>
@@ -53,9 +53,9 @@
    <widget class="QPushButton" name="btnNextDay">
     <property name="geometry">
      <rect>
-      <x>710</x>
+      <x>830</x>
       <y>50</y>
-      <width>261</width>
+      <width>291</width>
       <height>91</height>
      </rect>
     </property>

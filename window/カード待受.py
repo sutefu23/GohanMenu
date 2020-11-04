@@ -58,18 +58,21 @@ class Window(QWidget):
 
     def fetch_queue(self):
         if not queue.empty():
+            idm = queue.get()
+            if self.prev_idm == idm:
+                return
             reaction_thread = Thread(target=self.do_reaction)
             reaction_thread.start()
-            idm = queue.get()
             IDカード = IDカードfind(idm)
+            self.prev_idm = idm
             if IDカード is None:
+                reaction_thread.join()
                 return
             社員 = 社員find(IDカード.社員番号)
+            reaction_thread.join()
+
             if self.child_window is not None:
-                if self.child_window.社員 is not None and self.child_window.社員.社員番号 == 社員.社員番号:  # すでに開いた画面で同じ社員が表示中
-                    print("同じ社員が表示")
-                    return
-                else:
+                if self.child_window.社員 is not None and self.child_window.社員.社員番号 != 社員.社員番号:  # すでに開いた画面で同じ社員が表示中
                     self.child_window.quit()
 
             self.show_window(社員)
@@ -79,7 +82,12 @@ class Window(QWidget):
             beep.onRead()
 
             #　スクリーンセーバーの状態確認と消去
-            proc = subprocess.run(["xscreensaver-command","-time"], stdout = subprocess.PIPE, stderr = subprocess.PIPE )
-            stdout = proc.stdout.decode("utf8")
-            if "screen blanked" in stdout :
-                subprocess.run(["xscreensaver-command","-restart"])
+            try:
+                proc = subprocess.run(
+                    ["xscreensaver-command", "-time"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout = proc.stdout.decode("utf8")
+                if "screen blanked" in stdout:
+                    subprocess.run(["xscreensaver-command", "-restart"])
+            except FileNotFoundError as e:
+                print(e)
+

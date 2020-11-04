@@ -4,7 +4,6 @@ import nfc
 import binascii
 import time
 from queue import Queue
-from util.sound import SOUND
 from util.counter import Timer
 from PyQt5.QtWidgets import QMessageBox
 
@@ -29,8 +28,6 @@ def waiting_tag(queue: Queue):
             TIME_interval = 0.2
             target_res = clf.sense(target_req_nfc, target_req_felica, iterations=int(TIME_cycle//TIME_interval)+1, interval=TIME_interval)
             if not target_res is None:
-                beep = SOUND()
-                beep.onRead()
 
                 tag = nfc.tag.activate(clf, target_res)
 

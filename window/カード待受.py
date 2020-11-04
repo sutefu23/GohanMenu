@@ -9,6 +9,7 @@ from queue import Queue
 from threading import Thread
 
 from util.read import waiting_tag
+from util.sound import SOUND
 from util.counter import Timer
 from window import 食事受取, 食事予約
 from object.社員 import 社員, find as 社員find
@@ -68,4 +69,6 @@ class Window(QWidget):
                 else:
                     self.child_window.quit()
 
+            beep = SOUND()
+            beep.onRead()
             self.show_window(社員)

@@ -40,7 +40,6 @@ class Window(QWidget):
         props.setScrollMetric(QScrollerProperties.MaximumVelocity, 0.5)
         scroller.setScrollerProperties(props)
 
-
     def quit(self):
         self.ui.close()
         if self.parent() is not None: 

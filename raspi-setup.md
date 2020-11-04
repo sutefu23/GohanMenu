@@ -33,7 +33,10 @@ eval "$(pyenv init -)"
 `pip install --upgrade pip`
 `pip install -r requirements.txt`
 `pip install git+https://github.com/sn4k3/FakeRPi`
-`pip install RPi.GPIO`
+
+# 音楽再生用
+`sudo apt-get install libasound2-dev`
+`pip install simpleaudio`
 
 # PyQt5をいれる（１.５時間くらいかかる）
 `sudo apt-get install qt-sdk qtbase5-dev libgl1-mesa-dev qt5-default`

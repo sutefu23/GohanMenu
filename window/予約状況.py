@@ -2,7 +2,7 @@
 import os
 from PyQt5.QtGui import QFont, QColor, QBrush
 from PyQt5 import uic
-from PyQt5.QtCore import Qt, QFile, QVariant
+from PyQt5.QtCore import Qt, QSize, QFile, QVariant
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QScroller, QScrollerProperties
 
 from datetime import date, datetime, timedelta
@@ -27,9 +27,9 @@ class Window(QWidget):
         self.予約画面 = 予約画面
         self.社員 = 社員
         self.ui.btnGoBack.clicked.connect(
-            self.quit)
+            lambda: self.quit(withParent=False))
         self.ui.btnOpenReserve.clicked.connect(
-            lambda: self.ui.close())
+            lambda: self.quit(withParent=True))
         self.ui.tableWidget.itemClicked.connect(self.reserve)
         self.plot_data()
 
@@ -40,9 +40,11 @@ class Window(QWidget):
         props.setScrollMetric(QScrollerProperties.MaximumVelocity, 0.5)
         scroller.setScrollerProperties(props)
 
-    def quit(self):
-        self.ui.close()
-        if self.parent() is not None: 
+    def quit(self, withParent:bool = True):
+        if self.ui is not None:
+            self.ui.close()
+            self.ui = None
+        if withParent and self.parent() is not None: 
             self.parent().ui.close()
 
 
@@ -93,9 +95,8 @@ class Window(QWidget):
                     提供日列 = QTableWidgetItem(表示日付.strftime(表示フォーマット))
                 else:
                     提供日列 = QTableWidgetItem("")
-                提供日列.setFont(QFont(QFont().defaultFamily(), 48))
+                提供日列.setFont(QFont(QFont().defaultFamily(), 47))
                 提供日列.setData(Qt.UserRole,表示日付)
-                提供日列.setSize
                 self.ui.tableWidget.setItem(row, 0, 提供日列)  # 提供日
                 
                 種類列 = QTableWidgetItem(食事種類.value)

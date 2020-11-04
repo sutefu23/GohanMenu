@@ -122,7 +122,7 @@ class Window(QWidget):
                 menuItem = QListWidgetItem(メニュー.内容)
                 menuItem.setData(Qt.UserRole, メニュー.内容) # hidden data
                 menuItem.setFont(QFont(QFont().defaultFamily(), 48))
-
+    
                 注文検索結果 = list(filter(lambda 注文: 注文.メニューID == メニュー.メニューID, self.注文リスト))
 
                 if len(注文検索結果) > 0: #注文あり

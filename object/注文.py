@@ -54,14 +54,19 @@ DBName = "DataAPI_7" # systemn
 
 #注文検索
 def find(query):
-    db = FileMakerDB.system
-    db.prepareToken()
-    list = db.find(DBName, query)
     result = []
-    for record in list:
-        object = 注文(record)
-        result.append(object)
-    return result
+    try:
+        db = FileMakerDB.system
+        db.prepareToken()
+        list = db.find(DBName, query)
+        for record in list:
+            object = 注文(record)
+            result.append(object)
+        return result
+    except BaseException as e:
+        print(e)
+    finally:
+        return result
 
 def find提供日(提供日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(提供日)
@@ -82,6 +87,12 @@ def find発注日(発注日: date, 社員番号: str):
 def find発注日以降(開始日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(開始日)
     query = [{"DataAPI_食事メニュー::発注日": f">={daystr}", "社員番号": "=="+社員番号}]
+    return find(query)
+
+
+def find注文ID(メニューID: str):
+    daystr = FileMakerDB.makeDayString()
+    query = [{"メニューID": f"==" + メニューID}]
     return find(query)
 
 #テスト

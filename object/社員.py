@@ -1,5 +1,4 @@
 # This Python file uses the following encoding: utf-8
-
 from object import FileMakerDB
 
 # 社員テーブル
@@ -7,11 +6,13 @@ class 社員:
     社員番号: str
     社員名称: str
     社員_姓: str
+    アマダ社員番号: str
     recordId: str
     def __init__(self, record):
         self.社員番号 = record.string("社員番号")
         self.社員名称 = record.string("社員名称")
         self.社員_姓 = record.string("社員_姓")
+        self.アマダ社員番号 = record.string("アマダ社員番号")
 
 # アクセス用レイアウト
 DBName = "DataAPI_8" # pm_osakaname
@@ -32,11 +33,12 @@ def test(): # オブジェクトを返すテスト
     result = find(社員番号)
     print(result.社員番号) 
     print(result.社員名称) 
+    print(result.アマダ社員番号) 
 def test2(): # オブジェクトが存在しない場合のテスト
     社員番号 = "存在しない社員番号です"
     result = find(社員番号)
     print(result)
     if not result:
         print("ok")
-#test()
+# test()
 #test2()

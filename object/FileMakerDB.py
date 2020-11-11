@@ -1,3 +1,4 @@
+from logging import raiseExceptions
 import sys
 import requests
 import base64
@@ -5,9 +6,12 @@ import json
 import datetime
 from datetime import date
 from datetime import time
+import subprocess
+from PyQt5.QtWidgets import QMessageBox
+
 
 # insecure warning をオフ
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 # 1レコード
@@ -28,6 +32,12 @@ class FileMakerRecord:
         data = self.fieldData[フィールド名]
         time = time.strptime(data, "%H:%M:%S")
         return time
+    # フィールド名に対応する日付時刻を取り出す
+    def datetime(self, フィールド名):
+        data = self.fieldData[フィールド名]
+        time = datetime.datetime.strptime(data, "%m/%d/%Y %H:%M:%S")
+        return time
+
 
 # 日付をfilemaker用の文字列に変換する
 def makeDayString(日付: date):
@@ -40,12 +50,23 @@ def makeTimeString(時刻: time):
 # データベース関数
 class FileMakerDB:
     def __init__(self, filename, username, password):
-        self.baseURL = f"https://192.168.1.153/fmi/data/v1/databases/{filename}/"
+        self.host = "192.168.1.153"
+        self.baseURL = f"https://{self.host}/fmi/data/v1/databases/{filename}/"
         self.username = username
         self.password = password
         
     # セッションに対応するトークンを新規に生成する
     def prepareToken(self):
+        #ネットワークチェック
+        ping = subprocess.run(
+            ["ping", "-c", "1", "-W", "1",self.host], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        pong = ping.stdout.decode("utf8")
+        print(pong)
+        if "0 packets received" in pong:
+            QMessageBox.warning(
+                None, "NETWORK FAIL", u"ネットワークが接続されていません")
+            return
+
         session = requests.Session()
         self.session = session
         url = self.baseURL + "sessions"
@@ -64,6 +85,8 @@ class FileMakerDB:
     # テーブルの内容をすべて取得する
     def fetch(self, layout):
         result = []
+        if not hasattr(self, 'token'):
+            return
         token = self.token
         if not token:
             return result
@@ -90,6 +113,8 @@ class FileMakerDB:
     # テーブルに絞り込み検索をかける
     def find(self, layout, query):
         result = []
+        if not hasattr(self, 'token'):
+            return
         token = self.token
         if not token:
             return result

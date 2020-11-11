@@ -3,6 +3,7 @@ from enum import Enum
 from datetime import date
 from object import FileMakerDB
 from object.メニュー import 食事種類型
+from datetime import datetime
 
 class 食事要求状態(Enum):
     未処理 = "未処理"
@@ -14,12 +15,14 @@ class 注文:
     社員番号: str
     メニューID: str
     状態: 食事要求状態
+    タイムスタンプ: datetime
     recordId: str = ""
     def __init__(self, record: FileMakerDB.FileMakerRecord = None, 社員番号 = None, メニューID = None, 状態 = None):
         if record:
             self.社員番号 = record.string("社員番号")
             self.メニューID = record.string("メニューID")
             self.状態 = 食事要求状態(record.string("要求状態"))
+            self.タイムスタンプ = record.datetime("修正情報タイムスタンプ")
             self.recordId =  record.recordId
             self.提供日 = record.day("DataAPI_食事メニュー::提供日")
             self.発注日 = record.day("DataAPI_食事メニュー::発注日")
@@ -55,18 +58,14 @@ DBName = "DataAPI_7" # systemn
 #注文検索
 def find(query):
     result = []
-    try:
-        db = FileMakerDB.system
-        db.prepareToken()
-        list = db.find(DBName, query)
-        for record in list:
-            object = 注文(record)
-            result.append(object)
-        return result
-    except BaseException as e:
-        print(e)
-    finally:
-        return result
+    db = FileMakerDB.system
+    db.prepareToken()
+    list = db.find(DBName, query)
+    for record in list:
+        object = 注文(record)
+        result.append(object)
+    return result
+
 
 def find提供日(提供日: date, 社員番号: str):
     daystr = FileMakerDB.makeDayString(提供日)
@@ -90,9 +89,8 @@ def find発注日以降(開始日: date, 社員番号: str):
     return find(query)
 
 
-def find注文ID(メニューID: str):
-    daystr = FileMakerDB.makeDayString()
-    query = [{"メニューID": f"==" + メニューID}]
+def findメニューID(メニューID: str):
+    query = [{"メニューID": "=="+メニューID}]
     return find(query)
 
 #テスト
@@ -105,5 +103,17 @@ def test():
 def test2():
     提供日 = date(2020,11,1)
     find提供日(提供日, '023')
+
+def test3():
+    メニュー = findメニューID("M000011")
+    print(f"{メニュー}")
+
+
+def test4():
+    メニュー = findメニューID("M000011")
+    print(vars(メニュー[0]))
+
 #test()
 #test2()
+#test3()
+#test4()

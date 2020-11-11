@@ -4,10 +4,10 @@ import os
 from PyQt5.QtWidgets import QTableWidgetItem, QWidget, QListWidgetItem, QMessageBox
 from PyQt5.QtCore import Qt, QFile
 from PyQt5 import uic
-from PyQt5.QtGui import QFont, QColor, QBrush
-from typing import List
+from PyQt5.QtGui import QFont
+from typing import List, Union
 
-from datetime import date, timedelta, datetime
+from datetime import date, time, timedelta, datetime
 from enum import Enum
 from object.メニュー import メニュー, 食事種類型, find提供日 as findメニュー提供日
 from object.注文 import 注文, 食事要求状態, find提供日 as find注文提供日, find発注日 as find注文発注日
@@ -64,9 +64,12 @@ class Window(QWidget):
             return
 
         クリックメニュー名 = item.data(Qt.UserRole)  # hidden data
-
+        if クリックメニュー名 is None : return
         メニュー検索結果 = list(
             filter(lambda メニュー: メニュー.内容 == クリックメニュー名, self.メニューリスト))
+
+        if len(メニュー検索結果) == 0 : return
+
         クリックメニュー = メニュー検索結果[0]
 
         db = FileMakerDB.system
@@ -93,8 +96,9 @@ class Window(QWidget):
 
 
     def plot_data(self):
+        today = date.today() if config.環境 == "本番" else config.デバッグ日付
+
         if self.提供日 is None: #デフォルトでは今日発注のものを表示
-            today = date.today() if config.環境 == "本番" else config.デバッグ日付
             self.注文リスト = find注文発注日(today, self.社員.社員番号)
             if len(self.注文リスト) > 0:
                 self.提供日 = self.注文リスト[0].提供日
@@ -102,6 +106,15 @@ class Window(QWidget):
                 self.提供日 = today + timedelta(days=1)
         else:
             self.注文リスト = find注文提供日(self.提供日, self.社員.社員番号)
+
+        #締切時間表示
+        if self.提供日 == today + timedelta(days=1):
+            self.ui.labelDeadLine.setVisible(True)            
+            self.ui.labelDeadLine.setText(
+                f"発注締切時刻: {time.strftime(config.発注締切時刻, '%H時%M分')}")
+        else:
+            self.ui.labelDeadLine.setVisible(False)
+
 
         self.メニューリスト = findメニュー提供日(self.提供日)
 
@@ -117,6 +130,7 @@ class Window(QWidget):
             現在食事種類 = 食事種類型.昼食
 
         for 食事種類 in 食事種類型: #朝、昼でそれぞれメニューを抽出してループ処理
+            
             メニューリスト = list(filter(lambda メニュー: メニュー.種類 == 食事種類, self.メニューリスト))
             for メニュー in メニューリスト:
                 menuItem = QListWidgetItem(メニュー.内容)
@@ -128,22 +142,26 @@ class Window(QWidget):
                 if len(注文検索結果) > 0: #注文あり
                     self.setStatus(menuItem, checkStatus.On)
 
-                    today = date.today()
-                    if config.環境 == "開発":
-                        today = config.デバッグ日付
-                    if today == self.提供日:  # 今日の提供時間に該当しているものだと色を付ける
-                        if 現在食事種類 == 食事種類:
-                            menuItem.setForeground(QBrush(QColor(0, 0, 255)))
-                        else:
-                            menuItem.setForeground(QBrush(QColor(255, 0, 0)))
 
                 else: #注文なし
                     self.setStatus(menuItem, checkStatus.Off)
+                
+                #カロリー、食塩などの情報行
+                extraInfoItem = QListWidgetItem(
+                    f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　　　")
+                extraInfoItem.setFont(QFont(QFont().defaultFamily(), 20))
+                extraInfoItem.setTextAlignment(Qt.AlignRight)
+                extraInfoItem.setFlags(extraInfoItem.flags() ^ Qt.ItemIsSelectable)
 
-                if 食事種類 == 食事種類型.朝食:
-                    self.ui.listMorning.addItem(menuItem)
-                elif 食事種類 == 食事種類型.昼食:
-                    self.ui.listLunch.addItem(menuItem)
+                blankItem = QListWidgetItem("")
+                blankItem.setFont(QFont(QFont().defaultFamily(), 20))
+                blankItem.setFlags(blankItem.flags() ^ Qt.ItemIsSelectable)
+
+                targetList = self.ui.listMorning if 食事種類 == 食事種類型.朝食 else self.ui.listLunch
+                targetList.addItem(menuItem)
+                targetList.addItem(extraInfoItem)
+                targetList.addItem(blankItem)
+
 
 
     def setStatus(self, item: QTableWidgetItem, status: checkStatus):

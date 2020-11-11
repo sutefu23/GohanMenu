@@ -9,10 +9,10 @@ from typing import List
 
 import datetime
 
+from object.社員 import 社員
 from object.メニュー import  食事種類型
-from object.注文 import 注文, find提供日, 食事要求状態
+from object.注文 import find提供日, 食事要求状態
 from object import FileMakerDB
-
 import config
 
 TIMEOUT_MINUTE = 1
@@ -46,8 +46,7 @@ class Window(QWidget):
             if config.環境 == "開発":
                 print(vars(self.注文))
         
-        self.ui.btnGoBack.clicked.connect(
-            lambda: self.ui.close())
+        self.ui.btnGoBack.clicked.connect(self.quit)
         self.plot_data()
 
         self.timer = QTimer(self)
@@ -57,15 +56,23 @@ class Window(QWidget):
         
     def plot_data(self):
         self.ui.labelName.setText(self.社員.社員名称)
+        self.ui.labelPayAmount.setVisible(False)
+
         if self.注文 is None:
             self.ui.labelMenu.setText(u"予約がありません")
             print("注文なし")
         elif self.注文.状態 == 食事要求状態.未処理:
             self.ui.labelMenu.setText(self.注文.内容)
+            現金払い = not self.社員.アマダ社員番号.isdigit() #数字以外は現金払い
+            if 現金払い:
+                self.ui.labelPayAmount.setVisible(True)
+                self.ui.labelPayAmount.setText(f"{config.現金価格}円")
+
             self.receive()
         else:
             self.ui.labelMenu.setText(u"受取済")
             print("受取済")
+
 
     def quit(self):
         self.社員 = None

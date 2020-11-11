@@ -1,13 +1,14 @@
 # This Python file uses the following encoding: utf-8
 import os
 
-from PyQt5.QtWidgets import QWidget, QMessageBox
+from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import QFile, QTimer
 from PyQt5 import uic
 from enum import Enum
 from queue import Queue
 from threading import Thread
 import subprocess
+import platform
 
 from util.read import waiting_tag
 from util.sound import SOUND
@@ -58,8 +59,6 @@ class Window(QWidget):
 
     def fetch_queue(self):
        if not queue.empty():
-            reaction_thread = Thread(target=self.do_reaction)
-            reaction_thread.start()
             idm = queue.get()
             IDカード = IDカードfind(idm)
             if IDカード is None:
@@ -73,12 +72,11 @@ class Window(QWidget):
                     self.child_window.quit()
             beep = SOUND()
             beep.onRead()
-            self.do_reaction()
+            if platform.system() == "Linux":
+                self.break_blank_screen()
             self.show_window(社員)
 
-    def do_reaction(self):
-
-
+    def break_blank_screen(self):
         #　スクリーンセーバーの状態確認と消去
         try:
             proc = subprocess.run(

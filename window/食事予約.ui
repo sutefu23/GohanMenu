@@ -148,6 +148,19 @@
     </item>
     <item>
      <property name="text">
+      <string>カロリー 562kg　塩分:2.6g</string>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+     <property name="textAlignment">
+      <set>AlignLeading|AlignVCenter</set>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>昼食メニュー2</string>
      </property>
      <property name="font">
@@ -254,6 +267,30 @@
     </property>
     <property name="text">
      <string>終了</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="labelDeadLine">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>130</y>
+      <width>281</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="text">
+     <string>発注締め切り：</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
     </property>
    </widget>
   </widget>

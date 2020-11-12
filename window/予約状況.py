@@ -97,7 +97,7 @@ class Window(QWidget):
                 self.ui.tableWidget.setItem(row, 0, 提供日列)  # 提供日
                 
                 種類列 = QTableWidgetItem(食事種類.value)
-                種類列.setFont(QFont(QFont().defaultFamily(), 48))
+                種類列.setFont(QFont(QFont().defaultFamily(), 47))
                 self.ui.tableWidget.setItem(row, 1, 種類列)  # 朝夕
 
                 注文検索結果 = list(filter(lambda 注文: 注文.提供日 ==
@@ -108,7 +108,7 @@ class Window(QWidget):
                     メニューデータ = findメニューID(注文検索結果[0].メニューID)
                     if len(メニューデータ) > 0 :
                         (開始時刻, _) = find提供時刻(self.社員, メニューデータ[0])
-                        種類列.setText(種類列.text() + " " + time.strftime(開始時刻, '%H:%M'))
+                        種類列.setText(種類列.text() + time.strftime(開始時刻, '%H:%M'))
 
                 else:
                     メニュー名列 = QTableWidgetItem(u"予約なし")

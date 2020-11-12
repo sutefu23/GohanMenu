@@ -5,11 +5,13 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt, QFile
 from PyQt5.QtWidgets import QWidget, QTableWidgetItem, QScroller, QScrollerProperties
 
-from datetime import date, timedelta
+from datetime import date, timedelta, time
 from typing import List
 from window import 食事予約
 from object.注文 import 注文, 食事種類型, find提供日以降 as find注文提供日以降
+from object.メニュー import findメニューID
 from object.社員 import 社員
+from object.提供パターン import findTime as find提供時刻
 
 import locale
 import config
@@ -20,7 +22,7 @@ locale.setlocale(locale.LC_TIME, 'ja_JP.UTF-8')
 class Window(QWidget):
     注文リスト: List[注文]
     予約画面: 食事予約
-    def __init__(self,  社員: 社員, 予約画面: 食事予約):
+    def __init__(self, 社員: 社員, 予約画面: 食事予約):
         super(Window, self).__init__()
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.load_ui()
@@ -96,13 +98,18 @@ class Window(QWidget):
                 
                 種類列 = QTableWidgetItem(食事種類.value)
                 種類列.setFont(QFont(QFont().defaultFamily(), 48))
-                種類列.setTextAlignment(Qt.AlignCenter)
                 self.ui.tableWidget.setItem(row, 1, 種類列)  # 朝夕
 
                 注文検索結果 = list(filter(lambda 注文: 注文.提供日 ==
                                      表示日付 and 注文.種類 == 食事種類, self.注文リスト))
+                
                 if len(注文検索結果) > 0:  # 注文あり
                     メニュー名列 = QTableWidgetItem(注文検索結果[0].内容)
+                    メニューデータ = findメニューID(注文検索結果[0].メニューID)
+                    if len(メニューデータ) > 0 :
+                        (開始時刻, _) = find提供時刻(self.社員, メニューデータ[0])
+                        種類列.setText(種類列.text() + " " + time.strftime(開始時刻, '%H:%M'))
+
                 else:
                     メニュー名列 = QTableWidgetItem(u"予約なし")
 

@@ -22,6 +22,14 @@ class FileMakerRecord:
     # フィールド名に対応する文字列を取り出す
     def string(self, フィールド名):
         return self.fieldData[フィールド名]
+    # フィールド名に対応する数値を取り出す
+    def int(self, フィールド名) -> int:
+        data = self.fieldData[フィールド名]
+        return int(data)
+    # フィールド名に対応する数値を取り出す
+    def float(self, フィールド名) -> int:
+        data = self.fieldData[フィールド名]
+        return float(data)
     # フィールド名に対応する日付を取り出す
     def day(self, フィールド名)->datetime.date:
         data = self.fieldData[フィールド名]
@@ -30,13 +38,13 @@ class FileMakerRecord:
     # フィールド名に対応する時刻を取り出す
     def time(self, フィールド名):
         data = self.fieldData[フィールド名]
-        time = time.strptime(data, "%H:%M:%S")
-        return time
+        t = datetime.datetime.strptime(data, "%H:%M:%S").time()
+        return t
     # フィールド名に対応する日付時刻を取り出す
     def datetime(self, フィールド名):
         data = self.fieldData[フィールド名]
-        time = datetime.datetime.strptime(data, "%m/%d/%Y %H:%M:%S")
-        return time
+        d = datetime.datetime.strptime(data, "%m/%d/%Y %H:%M:%S")
+        return d
 
 
 # 日付をfilemaker用の文字列に変換する
@@ -61,7 +69,6 @@ class FileMakerDB:
         ping = subprocess.run(
             ["ping", "-c", "1", "-W", "1",self.host], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         pong = ping.stdout.decode("utf8")
-        print(pong)
         if "0 packets received" in pong:
             QMessageBox.warning(
                 None, "NETWORK FAIL", u"ネットワークが接続されていません")
@@ -91,6 +98,9 @@ class FileMakerDB:
         if not token:
             return result
         session = self.session
+        if session is None:
+            return
+
         offset = 1
         limit = 100
         while True:
@@ -119,6 +129,8 @@ class FileMakerDB:
         if not token:
             return result
         session = self.session
+        if session is None:
+            return
         offset = 1
         limit = 100
         url = f"{self.baseURL}layouts/{layout}/_find"

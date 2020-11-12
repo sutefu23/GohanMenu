@@ -10,8 +10,9 @@ from typing import List, Union
 from datetime import date, time, timedelta, datetime
 from enum import Enum
 from object.メニュー import メニュー, 食事種類型, find提供日 as findメニュー提供日
-from object.注文 import 注文, 食事要求状態, find提供日 as find注文提供日, find発注日 as find注文発注日
+from object.注文 import 注文, 食事要求状態, find提供日 as find注文提供日, find発注日 as find注文発注日, findメニューID as find注文メニューID
 from object.社員 import 社員
+from object.提供パターン import findTime as find提供時刻
 from object import FileMakerDB
 from window import 予約状況
 
@@ -53,22 +54,23 @@ class Window(QWidget):
         if self.child_window is not None:
             self.child_window.quit()
 
-
     def order(self, item: QListWidgetItem):
         #発注締切時刻以降は翌日より前のメニューを変更できない
         today = config.デバッグ日付 if config.環境 == "開発" else date.today()
 
-        if config.発注締切時刻 <= datetime.now().time() and self.提供日 <=  today + timedelta(days=1):
+        if config.発注締切時刻 <= datetime.now().time() and self.提供日 <= today + timedelta(days=1):
             QMessageBox.warning(
                 None, "NOT PERMITTED", u"予約変更期限を過ぎています")
             return
 
         クリックメニュー名 = item.data(Qt.UserRole)  # hidden data
-        if クリックメニュー名 is None : return
+        if クリックメニュー名 is None:
+            return
         メニュー検索結果 = list(
             filter(lambda メニュー: メニュー.内容 == クリックメニュー名, self.メニューリスト))
 
-        if len(メニュー検索結果) == 0 : return
+        if len(メニュー検索結果) == 0:
+            return
 
         クリックメニュー = メニュー検索結果[0]
 
@@ -76,7 +78,7 @@ class Window(QWidget):
         db.prepareToken()
 
         発注検索結果 = list(
-            filter(lambda 注文: 注文.内容 == クリックメニュー名, self.注文リスト)) #クリックされたデータはすでに発注されたデータである
+            filter(lambda 注文: 注文.内容 == クリックメニュー名, self.注文リスト))  # クリックされたデータはすでに発注されたデータである
         新規注文 = len(発注検索結果) == 0
 
         #一旦クリア
@@ -90,7 +92,7 @@ class Window(QWidget):
             if config.環境 == "開発":
                 print('発注:', クリックメニュー名)
             data.upload()
- 
+
         db.logout()
         self.plot_data()
 
@@ -115,7 +117,6 @@ class Window(QWidget):
         else:
             self.ui.labelDeadLine.setVisible(False)
 
-
         self.メニューリスト = findメニュー提供日(self.提供日)
 
         self.ui.labelToday.setText(date.strftime(self.提供日, '%m月%d日(%a)'))
@@ -124,38 +125,44 @@ class Window(QWidget):
         self.ui.listMorning.clear()
         self.ui.listLunch.clear()
 
-        if(datetime.now().time() <= config.朝食期限時刻):
-            現在食事種類 = 食事種類型.朝食
-        else:
-            現在食事種類 = 食事種類型.昼食
-
         for 食事種類 in 食事種類型: #朝、昼でそれぞれメニューを抽出してループ処理
-            
-            メニューリスト = list(filter(lambda メニュー: メニュー.種類 == 食事種類, self.メニューリスト))
-            for メニュー in メニューリスト:
-                menuItem = QListWidgetItem(メニュー.内容)
-                menuItem.setData(Qt.UserRole, メニュー.内容) # hidden data
-                menuItem.setFont(QFont(QFont().defaultFamily(), 48))
-    
-                注文検索結果 = list(filter(lambda 注文: 注文.メニューID == メニュー.メニューID, self.注文リスト))
+            抽出メニューリスト = list(filter(lambda メニュー: メニュー.種類 == 食事種類, self.メニューリスト))
 
+            #提供時刻表示
+            targetLabel = self.ui.labelMorningTime if 食事種類 == 食事種類型.朝食 else self.ui.labelLunchTime
+            if len(抽出メニューリスト) > 0:
+                (開始時刻, _) = find提供時刻(self.社員, 抽出メニューリスト[0])
+                targetLabel.setText(time.strftime(開始時刻, '%H:%M'))
+            else:
+                targetLabel.setText("")
+
+
+            for メニュー in 抽出メニューリスト:
+                menuItem = QListWidgetItem(メニュー.内容)
+                menuItem.setFont(QFont(QFont().defaultFamily(), 48))
+                注文検索結果 = list(filter(lambda 注文: 注文.メニューID == メニュー.メニューID, self.注文リスト))
                 if len(注文検索結果) > 0: #注文あり
                     self.setStatus(menuItem, checkStatus.On)
-
-
                 else: #注文なし
                     self.setStatus(menuItem, checkStatus.Off)
-                
+
                 #カロリー、食塩などの情報行
                 extraInfoItem = QListWidgetItem(
                     f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　　　")
                 extraInfoItem.setFont(QFont(QFont().defaultFamily(), 20))
                 extraInfoItem.setTextAlignment(Qt.AlignRight)
-                extraInfoItem.setFlags(extraInfoItem.flags() ^ Qt.ItemIsSelectable)
+                extraInfoItem.setFlags(Qt.ItemIsEnabled)
 
                 blankItem = QListWidgetItem("")
-                blankItem.setFont(QFont(QFont().defaultFamily(), 20))
-                blankItem.setFlags(blankItem.flags() ^ Qt.ItemIsSelectable)
+                blankItem.setFont(QFont(QFont().defaultFamily(), 14))
+                blankItem.setFlags(menuItem.flags() ^ Qt.ItemIsSelectable)
+
+                #注文可能数を超えてないか確認
+                if self.isOrderLimit(メニュー):
+                    menuItem.setFlags(menuItem.flags() ^ Qt.ItemIsEnabled)
+                    extraInfoItem.setFlags(extraInfoItem.flags() ^ Qt.ItemIsEnabled)
+                else:
+                    menuItem.setData(Qt.UserRole, メニュー.内容)  # hidden data
 
                 targetList = self.ui.listMorning if 食事種類 == 食事種類型.朝食 else self.ui.listLunch
                 targetList.addItem(menuItem)
@@ -163,6 +170,9 @@ class Window(QWidget):
                 targetList.addItem(blankItem)
 
 
+    def isOrderLimit(self, メニュー: メニュー):
+        注文メニュー群 = find注文メニューID(メニュー.メニューID)
+        return len(注文メニュー群) >= メニュー.最大提供数
 
     def setStatus(self, item: QTableWidgetItem, status: checkStatus):
         if status == checkStatus.On:

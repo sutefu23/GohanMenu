@@ -7,9 +7,6 @@ import sys
 #デバッグ日付 = datetime.date(2020, 11, 2)  # デバッグ用の今日の日付。開発時に有効
 デバッグ日付 = datetime.date.today()  # デバッグ用の今日の日付。開発時に有効
 
-現金価格 = 330
-
-
 
 
 # python main.py devで開発起動

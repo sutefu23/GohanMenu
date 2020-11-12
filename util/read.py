@@ -21,7 +21,7 @@ def waiting_tag(queue: Queue):
     while True:
         try:
             # USBに接続されたNFCリーダに接続
-            clf = nfc.ContactlessFrontend('usb:054c:06c3')
+            clf = nfc.ContactlessFrontend('usb')
             # 待ち受けの1サイクル秒
             TIME_cycle = 1.0
             # 待ち受けの反応インターバル秒

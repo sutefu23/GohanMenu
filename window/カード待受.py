@@ -63,7 +63,7 @@ class Window(QWidget):
             IDカード = IDカードfind(idm)
             if IDカード is None:
                 return
-            社員 = 社員find(IDカード.社員番号)
+            社員 = 社員find(IDカード)
             if self.child_window is not None:
                 if self.child_window.社員 is not None and self.child_window.社員.社員番号 == 社員.社員番号:  # すでに開いた画面で同じ社員が表示中
                     print("同じ社員が表示")

@@ -16,8 +16,11 @@ class メニュー :
     発注日: date
     種類: 食事種類型 
     内容: str
-    カロリー: str
-    食塩: str
+    カロリー: int
+    食塩: int
+    最大提供数: int
+    金額: int
+    提供パターン: int
     def __init__(self, record):
         self.メニューID = record.fieldData["メニューID"]
         self.図番 = record.fieldData["図番"]
@@ -25,8 +28,11 @@ class メニュー :
         self.発注日 = record.day("発注日")
         self.種類 = 食事種類型(record.fieldData["種類"])
         self.内容 = record.fieldData["内容"]
-        self.カロリー = record.fieldData["カロリー"]
-        self.食塩 = record.fieldData["食塩"]
+        self.カロリー = record.int("カロリー")
+        self.食塩 = record.float("食塩")
+        self.最大提供数 = record.int("最大提供数")
+        self.金額 = record.int("金額")
+        self.提供パターン = record.int("提供パターン")
 
 # アクセス用レイアウト名
 DBName = "DataAPI_6" # systemn

@@ -78,7 +78,7 @@ class Window(QWidget):
 
         isNewOrder = not self.isAlreadyOrder(クリックメニュー)
 
-        if isNewOrder and self.isOrderLimit(メニュー):  # 注文制限確認
+        if isNewOrder and self.isOrderLimit(クリックメニュー):  # 注文制限確認
             QMessageBox.warning(
                     None, "ORDER LIMIT", u"既に最大発注数をオーバーしています")
             return
@@ -147,7 +147,7 @@ class Window(QWidget):
                     self.setStatus(menuItem, checkStatus.Off)
 
                 #カロリー、食塩などの情報行
-                最大提供数 = "無制限" if メニュー.isUnlimit() else メニュー.最大提供数
+                最大提供数 = "無制限" if self.isUnlimit(メニュー) else メニュー.最大提供数
                 extraInfoItem = QListWidgetItem(
                     f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　注文数:{self.getCurrentOrderAmount(メニュー)}　最大提供数:{最大提供数}　　　")
                 extraInfoItem.setFont(QFont(QFont().defaultFamily(), 20))
@@ -184,8 +184,11 @@ class Window(QWidget):
             return
         return メニュー検索結果[0]
 
+    def isUnlimit(self, メニュー:メニュー):
+        return メニュー.最大提供数 == 999
+
     def isOrderLimit(self, メニュー:メニュー):
-        if メニュー.isUnlimit():
+        if self.isUnlimit(メニュー):
             return False
         return self.getCurrentOrderAmount(メニュー) >= メニュー.最大提供数
 

@@ -66,27 +66,24 @@ class Window(QWidget):
         クリックメニュー名 = item.data(Qt.UserRole)  # hidden data
         if クリックメニュー名 is None:
             return
-        メニュー検索結果 = list(
-            filter(lambda メニュー: メニュー.内容 == クリックメニュー名, self.メニューリスト))
 
-        if len(メニュー検索結果) == 0:
-            return
-
-        クリックメニュー = メニュー検索結果[0]
+        クリックメニュー = self.getMenuByMenuName(クリックメニュー名)
 
         db = FileMakerDB.system
         db.prepareToken()
 
-        発注検索結果 = list(
-            filter(lambda 注文: 注文.内容 == クリックメニュー名, self.注文リスト))  # クリックされたデータはすでに発注されたデータである
-        新規注文 = len(発注検索結果) == 0
+        isNewOrder = not self.isAlreadyOrder(クリックメニュー)
 
+        if isNewOrder and self.isOrderLimit(クリックメニュー):  # 注文制限確認
+            QMessageBox.warning(
+                    None, "ORDER LIMIT", u"既に最大発注数をオーバーしています")
+            return
         #一旦クリア
         for Order in self.注文リスト:
             if Order.種類 == クリックメニュー.種類:
                 Order.delete()
 
-        if 新規注文:
+        if isNewOrder:
             data = 注文(社員番号=self.社員.社員番号,
                       メニューID=クリックメニュー.メニューID, 状態=食事要求状態.未処理)
             if config.環境 == "開発":
@@ -158,7 +155,7 @@ class Window(QWidget):
                 blankItem.setFlags(menuItem.flags() ^ Qt.ItemIsSelectable)
 
                 #注文可能数を超えてないか確認
-                if self.isOrderLimit(メニュー):
+                if self.isOrderLimit(メニュー) and not self.isAlreadyOrder(メニュー):
                     menuItem.setFlags(menuItem.flags() ^ Qt.ItemIsEnabled)
                     extraInfoItem.setFlags(extraInfoItem.flags() ^ Qt.ItemIsEnabled)
                 else:
@@ -173,6 +170,18 @@ class Window(QWidget):
     def isOrderLimit(self, メニュー: メニュー):
         注文メニュー群 = find注文メニューID(メニュー.メニューID)
         return len(注文メニュー群) >= メニュー.最大提供数
+
+    def isAlreadyOrder(self, メニュー: メニュー):  # データがすでに発注されたデータか否か
+        発注検索結果 = list(
+            filter(lambda 注文: 注文.内容 == メニュー.内容, self.注文リスト))  
+        return len(発注検索結果) > 0
+
+    def getMenuByMenuName(self, メニュー名): #メニュー内容からメニューオブジェクトを取得
+        メニュー検索結果 = list(
+                    filter(lambda メニュー: メニュー.内容 == メニュー名, self.メニューリスト))
+        if len(メニュー検索結果) == 0:
+            return
+        return メニュー検索結果[0]
 
     def setStatus(self, item: QTableWidgetItem, status: checkStatus):
         if status == checkStatus.On:

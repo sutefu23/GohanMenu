@@ -33,6 +33,10 @@ class メニュー :
         self.最大提供数 = record.int("最大提供数")
         self.金額 = record.int("金額")
         self.提供パターン = record.int("提供パターン")
+    
+    def isUnlimit(self):
+        return self.最大提供数 == 999
+
 
 # アクセス用レイアウト名
 DBName = "DataAPI_6" # systemn

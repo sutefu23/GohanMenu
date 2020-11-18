@@ -45,6 +45,10 @@ class Window(QWidget):
         )
         self.ui.listMorning.itemClicked.connect(self.order)
         self.ui.listLunch.itemClicked.connect(self.order)
+        disableStyle = ":disabled { color: gray; }"
+
+        self.ui.listMorning.setStyleSheet(disableStyle)
+        self.ui.listLunch.setStyleSheet(disableStyle)
 
         self.plot_data()
 
@@ -74,7 +78,7 @@ class Window(QWidget):
 
         isNewOrder = not self.isAlreadyOrder(クリックメニュー)
 
-        if isNewOrder and self.isOrderLimit(クリックメニュー):  # 注文制限確認
+        if isNewOrder and self.isOrderLimit(メニュー):  # 注文制限確認
             QMessageBox.warning(
                     None, "ORDER LIMIT", u"既に最大発注数をオーバーしています")
             return
@@ -133,7 +137,6 @@ class Window(QWidget):
             else:
                 targetLabel.setText("")
 
-
             for メニュー in 抽出メニューリスト:
                 menuItem = QListWidgetItem(メニュー.内容)
                 menuItem.setFont(QFont(QFont().defaultFamily(), 48))
@@ -144,8 +147,9 @@ class Window(QWidget):
                     self.setStatus(menuItem, checkStatus.Off)
 
                 #カロリー、食塩などの情報行
+                最大提供数 = "無制限" if メニュー.isUnlimit() else メニュー.最大提供数
                 extraInfoItem = QListWidgetItem(
-                    f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　　　")
+                    f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　注文数:{self.getCurrentOrderAmount(メニュー)}　最大提供数:{最大提供数}　　　")
                 extraInfoItem.setFont(QFont(QFont().defaultFamily(), 20))
                 extraInfoItem.setTextAlignment(Qt.AlignRight)
                 extraInfoItem.setFlags(Qt.ItemIsEnabled)
@@ -153,6 +157,7 @@ class Window(QWidget):
                 blankItem = QListWidgetItem("")
                 blankItem.setFont(QFont(QFont().defaultFamily(), 14))
                 blankItem.setFlags(menuItem.flags() ^ Qt.ItemIsSelectable)
+
 
                 #注文可能数を超えてないか確認
                 if self.isOrderLimit(メニュー) and not self.isAlreadyOrder(メニュー):
@@ -167,10 +172,6 @@ class Window(QWidget):
                 targetList.addItem(blankItem)
 
 
-    def isOrderLimit(self, メニュー: メニュー):
-        注文メニュー群 = find注文メニューID(メニュー.メニューID)
-        return len(注文メニュー群) >= メニュー.最大提供数
-
     def isAlreadyOrder(self, メニュー: メニュー):  # データがすでに発注されたデータか否か
         発注検索結果 = list(
             filter(lambda 注文: 注文.内容 == メニュー.内容, self.注文リスト))  
@@ -182,6 +183,16 @@ class Window(QWidget):
         if len(メニュー検索結果) == 0:
             return
         return メニュー検索結果[0]
+
+    def isOrderLimit(self, メニュー:メニュー):
+        if メニュー.isUnlimit():
+            return False
+        return self.getCurrentOrderAmount(メニュー) >= メニュー.最大提供数
+
+    def getCurrentOrderAmount(self, メニュー: メニュー):
+        注文メニュー群 = find注文メニューID(メニュー.メニューID)
+        return len(注文メニュー群)
+
 
     def setStatus(self, item: QTableWidgetItem, status: checkStatus):
         if status == checkStatus.On:

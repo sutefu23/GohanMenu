@@ -2,7 +2,7 @@
 cd ~/GohanMenu
 while :
   do
-    if [ "ping -c 1 -W 1 github.com" ]; then
+    if [ "`ssh -T git@github.com | grep success`" ]; then
       echo "コネクション確認"
       git pull
       break
@@ -15,7 +15,7 @@ while :
 
 while :
   do
-    if [ "`ps ax | grep python main.py`" ]; then
+    if [ "`sudo ps ax | grep python main.py`" ]; then
       # "ソフト起動中"
       sleep 1
     else

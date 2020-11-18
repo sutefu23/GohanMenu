@@ -1,17 +1,7 @@
 #!/bin/bash -
 cd ~/GohanMenu
-while :
-  do
-    if [ "`ssh -T git@github.com | grep success`" ]; then
-      echo "コネクション確認"
-      git pull
-      break
-    else
-      sleep 1
-      echo "コネクション確認リトライ"
-    fi
-  done
-
+sleep 15
+git pull
 
 while :
   do

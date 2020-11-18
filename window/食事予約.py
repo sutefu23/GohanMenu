@@ -147,9 +147,11 @@ class Window(QWidget):
                     self.setStatus(menuItem, checkStatus.Off)
 
                 #カロリー、食塩などの情報行
-                最大提供数 = "無制限" if self.isUnlimit(メニュー) else メニュー.最大提供数
+                最大提供数表示 = ""
+                if not self.isUnlimit(メニュー):
+                   最大提供数表示 = f"最大提供数:{メニュー.最大提供数}" 
                 extraInfoItem = QListWidgetItem(
-                    f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　注文数:{self.getCurrentOrderAmount(メニュー)}　最大提供数:{最大提供数}　　　")
+                    f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　注文数:{self.getCurrentOrderAmount(メニュー)}　{最大提供数表示}　　　")
                 extraInfoItem.setFont(QFont(QFont().defaultFamily(), 20))
                 extraInfoItem.setTextAlignment(Qt.AlignRight)
                 extraInfoItem.setFlags(Qt.ItemIsEnabled)
@@ -185,7 +187,7 @@ class Window(QWidget):
         return メニュー検索結果[0]
 
     def isUnlimit(self, メニュー:メニュー):
-        return メニュー.最大提供数 == 999
+        return メニュー.最大提供数 == -1
 
     def isOrderLimit(self, メニュー:メニュー):
         if self.isUnlimit(メニュー):

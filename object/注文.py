@@ -50,7 +50,7 @@ class 注文:
         if self.recordId:
             db.update(DBName, self.recordId, data) # 更新
         else:
-            db.insert(DBName, data) # 追加
+            self.recordId = db.insert(DBName, data)  # 追加
 
 # アクセス用レイアウト名
 DBName = "DataAPI_7" # systemn

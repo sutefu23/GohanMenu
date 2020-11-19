@@ -11,7 +11,7 @@ from datetime import date, time, timedelta, datetime
 from enum import Enum
 from object.メニュー import メニュー, 食事種類型, find提供日 as findメニュー提供日
 from object.注文 import 注文, 食事要求状態, find提供日 as find注文提供日, find発注日 as find注文発注日, findメニューID as find注文メニューID
-from object.社員 import 社員
+from object.社員 import 社員 as 社員型
 from object.提供パターン import findTime as find提供時刻
 from object import FileMakerDB
 from window import 予約状況
@@ -26,8 +26,11 @@ class checkStatus(Enum):
 class Window(QWidget):
     メニューリスト: List[メニュー] = None
     注文リスト: List[注文] = None
+    社員: 社員型 = None
+    提供日: date = None
     child_window: QWidget = None
-    def __init__(self, 社員: 社員, 提供日: date = None):
+
+    def __init__(self, 社員: 社員型, 提供日: date = None):
         super(Window, self).__init__()
         self.load_ui()
         self.setAttribute(Qt.WA_DeleteOnClose)
@@ -62,7 +65,7 @@ class Window(QWidget):
         #発注締切時刻以降は翌日より前のメニューを変更できない
         today = config.デバッグ日付 if config.環境 == "開発" else date.today()
 
-        if config.発注締切時刻 <= datetime.now().time() and self.提供日 <= today + timedelta(days=1):
+        if self.提供日 <= today or (self.提供日 == today + timedelta(days=1) and config.発注締切時刻 <= datetime.now().time()):
             QMessageBox.warning(
                 None, "NOT PERMITTED", u"予約変更期限を過ぎています")
             return
@@ -93,6 +96,11 @@ class Window(QWidget):
             if config.環境 == "開発":
                 print('発注:', クリックメニュー名)
             data.upload()
+
+            if self.isOrderOver(クリックメニュー):                
+                data.delete()
+                QMessageBox.warning(
+                    None, "ORDER LIMIT", u"注文可能数をオーバーしました")
 
         db.logout()
         self.plot_data()
@@ -148,7 +156,7 @@ class Window(QWidget):
 
                 #カロリー、食塩などの情報行
                 最大提供数表示 = ""
-                if not self.isUnlimit(メニュー):
+                if not メニュー.isUnlimit:
                    最大提供数表示 = f"最大提供数:{メニュー.最大提供数}" 
                 extraInfoItem = QListWidgetItem(
                     f"カロリー:{メニュー.カロリー}kcal　食塩:{メニュー.食塩}g　注文数:{self.getCurrentOrderAmount(メニュー)}　{最大提供数表示}　　　")
@@ -174,6 +182,18 @@ class Window(QWidget):
                 targetList.addItem(blankItem)
 
 
+    def isOrderOver(self, メニュー:メニュー):# 発注後再チェック
+        if メニュー.isUnlimit : return False
+        注文群 = find注文メニューID(メニュー.メニューID)
+        注文群 = sorted(注文群, key=lambda 注文: 注文.タイムスタンプ)
+        注文数 = len(注文群)
+        if 注文数 <= メニュー.最大提供数 : return False
+        for i in range(メニュー.最大提供数 - 1, 注文数):
+            if 注文群[i].社員番号 == self.社員.社員番号:
+                return True
+        return False
+
+    
     def isAlreadyOrder(self, メニュー: メニュー):  # データがすでに発注されたデータか否か
         発注検索結果 = list(
             filter(lambda 注文: 注文.内容 == メニュー.内容, self.注文リスト))  
@@ -186,11 +206,9 @@ class Window(QWidget):
             return
         return メニュー検索結果[0]
 
-    def isUnlimit(self, メニュー:メニュー):
-        return メニュー.最大提供数 == -1
 
     def isOrderLimit(self, メニュー:メニュー):
-        if self.isUnlimit(メニュー):
+        if メニュー.isUnlimit:
             return False
         return self.getCurrentOrderAmount(メニュー) >= メニュー.最大提供数
 

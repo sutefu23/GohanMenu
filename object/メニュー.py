@@ -2,6 +2,7 @@
 from enum import Enum
 from datetime import date
 from object import FileMakerDB
+from datetime import datetime
 
 from pprint import pprint
 
@@ -21,6 +22,7 @@ class メニュー :
     最大提供数: int
     金額: int
     提供パターン: int
+    isUnlimit: bool
     def __init__(self, record):
         self.メニューID = record.fieldData["メニューID"]
         self.図番 = record.fieldData["図番"]
@@ -33,7 +35,8 @@ class メニュー :
         self.最大提供数 = record.int("最大提供数")
         self.金額 = record.int("金額")
         self.提供パターン = record.int("提供パターン")
-
+        self.isUnlimit = self.最大提供数 == -1
+    
 # アクセス用レイアウト名
 DBName = "DataAPI_6" # systemn
 

@@ -93,6 +93,10 @@ class FileMakerDB:
             return None
 
     def logout(self):
+        token = self.token
+        if token:
+            url = f"{self.baseURL}sessions/{token}"
+            self.session.delete(url)
         self.session = None
 
     # テーブルの内容をすべて取得する

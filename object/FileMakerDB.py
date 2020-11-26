@@ -82,9 +82,15 @@ class FileMakerDB:
         headers["Content-Type"] = "application/json"
         response = session.post(url, headers=headers, json={}, verify=False)
         json = response.json()
-        token = json["response"]["token"]
-        self.token = token
-        return token
+        if 'response' in json.keys() and 'token' in json["response"].keys():
+            token = json["response"]["token"]
+            self.token = token
+            return token
+        else:
+            QMessageBox.warning(
+                None, "FILEMAKER FAIL", u"ファイルメーカーのトークン取得でエラーがおきました。")
+            print(json)
+            return None
 
     def logout(self):
         self.session = None

@@ -57,8 +57,8 @@ def makeTimeString(時刻: time):
 
 # データベース関数
 class FileMakerDB:
-    def __init__(self, filename, username, password):
-        self.host = "192.168.1.153"
+    def __init__(self, host, filename, username, password):
+        self.host = host
         self.baseURL = f"https://{self.host}/fmi/data/v1/databases/{filename}/"
         self.username = username
         self.password = password
@@ -207,9 +207,9 @@ class FileMakerDB:
         session.get(url, headers=headers, verify=False)
         
 # 生産管理DB
-pm_osakaname = FileMakerDB("pm_osakaname", "api", "@pi")
+pm_osakaname = FileMakerDB("192.168.1.153", "pm_osakaname", "api", "@pi")
 # 補助DB
-system = FileMakerDB("system", "admin", "ws161")
+system = FileMakerDB("192.168.1.155", "system", "admin", "ws161")
 
 #test
 #pm_osakaname.prepareToken()

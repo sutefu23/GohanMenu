@@ -36,6 +36,7 @@ def fetch() -> List[提供パターン]:
         db = FileMakerDB.system
         db.prepareToken()
         list = db.fetch(DBName)
+        db.logout()
         for record in list:
             object = 提供パターン(record)
             result.append(object)

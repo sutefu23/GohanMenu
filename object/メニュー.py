@@ -45,6 +45,7 @@ def find(query):
     db = FileMakerDB.system
     db.prepareToken()
     list = db.find(DBName, query)
+    db.logout()
     result = []
     for record in list:
         object = メニュー(record)

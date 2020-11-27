@@ -209,7 +209,7 @@ class FileMakerDB:
 # 生産管理DB
 pm_osakaname = FileMakerDB("192.168.1.153", "pm_osakaname", "api", "@pi")
 # 補助DB
-system = FileMakerDB("192.168.1.155", "system", "admin", "ws161")
+system = FileMakerDB("192.168.1.153", "system", "admin", "ws161")
 
 #test
 #pm_osakaname.prepareToken()

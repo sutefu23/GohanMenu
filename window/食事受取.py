@@ -87,7 +87,6 @@ class Window(QWidget):
         db.prepareToken()
         self.注文.状態 = 食事要求状態.受取待
         self.注文.upload()
-        db.logout()
 
 
     def load_ui(self):

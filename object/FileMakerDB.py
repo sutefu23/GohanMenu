@@ -8,7 +8,7 @@ from datetime import date
 from datetime import time
 import subprocess
 from PyQt5.QtWidgets import QMessageBox
-
+import config
 
 # insecure warning をオフ
 from urllib3.exceptions import InsecureRequestWarning
@@ -57,6 +57,10 @@ def makeTimeString(時刻: time):
 
 # データベース関数
 class FileMakerDB:
+    session: requests.Session = None
+    token: str = None
+    expire = datetime.datetime.now()
+
     def __init__(self, host, filename, username, password):
         self.host = host
         self.baseURL = f"https://{self.host}/fmi/data/v1/databases/{filename}/"
@@ -74,23 +78,27 @@ class FileMakerDB:
                 None, "NETWORK FAIL", u"ネットワークが接続されていません")
             return
 
-        session = requests.Session()
-        self.session = session
-        url = self.baseURL + "sessions"
-        headers = {}
-        headers["Authorization"] = "Basic " + base64.b64encode((self.username + ":" + self.password).encode()).decode("ascii")
-        headers["Content-Type"] = "application/json"
-        response = session.post(url, headers=headers, json={}, verify=False)
-        json = response.json()
-        if 'response' in json.keys() and 'token' in json["response"].keys():
-            token = json["response"]["token"]
-            self.token = token
-            return token
-        else:
-            QMessageBox.warning(
-                None, "FILEMAKER FAIL", u"ファイルメーカーのトークン取得でエラーがおきました。")
-            print(json)
-            return None
+        if datetime.datetime.now() > self.expire:
+            self.logout()
+            if config.環境 == "開発" : print("セッショントークン再取得")
+            session = requests.Session()
+            self.expire = datetime.datetime.now() + config.セッション期限
+            self.session = session
+            url = self.baseURL + "sessions"
+            headers = {}
+            headers["Authorization"] = "Basic " + base64.b64encode((self.username + ":" + self.password).encode()).decode("ascii")
+            headers["Content-Type"] = "application/json"
+            response = session.post(url, headers=headers, json={}, verify=False)
+            json = response.json()
+            if 'response' in json.keys() and 'token' in json["response"].keys():
+                token = json["response"]["token"]
+                self.token = token
+                return token
+            else:
+                QMessageBox.warning(
+                    None, "FILEMAKER FAIL", u"ファイルメーカーのトークン取得でエラーがおきました。")
+                print(json)
+        return None
 
     def logout(self):
         token = self.token

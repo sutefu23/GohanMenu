@@ -22,7 +22,6 @@ def find(カードID) -> IDカード:
     db = FileMakerDB.system
     db.prepareToken()
     list = db.find(DBName, query)
-    db.logout()
     if not list:
         return
     return IDカード(list[0])

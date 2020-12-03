@@ -102,7 +102,6 @@ class Window(QWidget):
                 QMessageBox.warning(
                     None, "ORDER LIMIT", u"注文可能数をオーバーしました")
 
-        db.logout()
         self.plot_data()
 
 

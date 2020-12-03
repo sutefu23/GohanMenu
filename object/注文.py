@@ -51,7 +51,6 @@ class 注文:
             db.update(DBName, self.recordId, data) # 更新
         else:
             self.recordId = db.insert(DBName, data)  # 追加
-        db.logout
 
 # アクセス用レイアウト名
 DBName = "DataAPI_7" # systemn
@@ -62,7 +61,6 @@ def find(query):
     db = FileMakerDB.system
     db.prepareToken()
     list = db.find(DBName, query)
-    db.logout()
     for record in list:
         object = 注文(record)
         result.append(object)

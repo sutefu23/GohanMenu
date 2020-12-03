@@ -26,7 +26,6 @@ def find(IDカード: IDカード):
     db = FileMakerDB.pm_osakaname
     db.prepareToken()
     list = db.find(DBName, query)
-    db.logout()
     if not list:
         return
     return 社員(list[0], IDカード)
